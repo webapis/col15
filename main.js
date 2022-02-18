@@ -3,44 +3,113 @@
  * Use this to bootstrap your projects using the most up-to-date code.
  * If you're looking for examples or want to learn more, see README.
  */
-
+require('dotenv').config()
+require('./inputConfig')()
+const fs = require('fs')
 const Apify = require('apify');
-const { handleStart, handleList, handleDetail } = require('./src/routes');
+var cloudinary = require('cloudinary');
+const { uploadToAtlas } = require('./atlas')
+cloudinary.config({
+    cloud_name: 'codergihub',
+    api_key: '583195742238215',
+    api_secret: 'mkZu56VXRtIqRI83FbX-Az1so6w'
+});
 
 const { utils: { log } } = Apify;
+const startUrl = process.env.startUrl
+const JSONfileName = process.env.JSONfileName
+const marka = process.env.marka
+const gender = process.env.gender
+const category = process.env.category
+const subcategory = process.env.subcategory
 
 Apify.main(async () => {
-    const { startUrls } = await Apify.getInput();
+    try {
 
-    const requestList = await Apify.openRequestList('start-urls', startUrls);
-    const requestQueue = await Apify.openRequestQueue();
-    const proxyConfiguration = await Apify.createProxyConfiguration();
 
-    const crawler = new Apify.PuppeteerCrawler({
-        requestList,
-        requestQueue,
-       // proxyConfiguration,
-        launchContext: {
-            // Chrome with stealth should work for most websites.
-            // If it doesn't, feel free to remove this.
-            useChrome: true,
-            stealth: true,
-        },
-        handlePageFunction: async (context) => {
-            const { url, userData: { label } } = context.request;
-            log.info('Page opened.', { label, url });
-            switch (label) {
-                case 'LIST':
-                    return handleList(context);
-                case 'DETAIL':
-                    return handleDetail(context);
-                default:
-                    return handleStart(context);
+        console.log('gender', gender)
+        console.log('category', category)
+        console.log('marka', marka)
+        const { handler, getUrls } = require(`./handlers/${marka}`);
+        const input = await Apify.getInput();
+        console.log(input);
+
+        const requestList = await Apify.openRequestList('start-urls', [startUrl]);
+        const requestQueue = await Apify.openRequestQueue();
+
+        const dataset = await Apify.openDataset(`${JSONfileName}-${Date.now()}`);
+
+
+
+        const handlePageFunction = async (context) => {
+            const { page } = context
+            const pageUrl = await page.url()
+
+            if (pageUrl === startUrl) {
+                const nextPageUrl = startUrl.substring(0, startUrl.indexOf("=") + 1)
+                const pageUrls = await getUrls(page, nextPageUrl)
+
+                for (let url of pageUrls) {
+                    await requestQueue.addRequest({ url });
+                }
+
             }
-        },
-    });
+            const data = await handler(page)
+            const mappedData = data.map(d => {
+                return {
+                    ...d, marka,
+                    gender,
+                    category, subcategory
+                }
+            })
+            await dataset.pushData(mappedData);
 
-    log.info('Starting the crawl.');
-    await crawler.run();
-    log.info('Crawl finished.');
+
+            //  return   
+        }
+        const crawler = new Apify.PuppeteerCrawler({
+            requestList,
+            requestQueue,
+            maxConcurrency: 3,
+            launchContext: {
+                // Chrome with stealth should work for most websites.
+                // If it doesn't, feel free to remove this.
+                useChrome: true,
+
+            },
+            handlePageFunction,
+            preNavigationHooks: [
+                async (crawlingContext, gotoOptions) => {
+                    const { page } = crawlingContext;
+                    await page.setRequestInterception(true);
+                    page.on('request', req => {
+                        const resourceType = req.resourceType();
+                        if (resourceType === 'image') {
+                            req.respond({
+                                status: 200,
+                                contentType: 'image/jpeg',
+                                body: ''
+                            });
+
+
+                        } else {
+                            req.continue();
+                        }
+                    });
+                },
+            ]
+        });
+
+        log.info('Starting the crawl.');
+        await crawler.run();
+        const { items } = await dataset.getData()
+
+        fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(items))
+        const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
+        await uploadToAtlas({ data: items })
+        log.info('Crawl finished.');
+
+    } catch (error) {
+        console.log('error', error)
+    }
 });
