@@ -9,6 +9,7 @@ const fs = require('fs')
 const Apify = require('apify');
 var cloudinary = require('cloudinary');
 const { uploadToAtlas } = require('./atlas')
+const { setInputs } = require('./inputConfig')
 cloudinary.config({
     cloud_name: 'codergihub',
     api_key: '583195742238215',
@@ -19,14 +20,14 @@ cloudinary.config({
 
 Apify.main(async () => {
     try {
-       await require('./inputConfig')()
-       const { utils: { log } } = Apify;
-       const startUrl = process.env.startUrl
-       const JSONfileName = process.env.JSONfileName
-       const marka = process.env.marka
-       const gender = process.env.gender
-       const category = process.env.category
-       const subcategory = process.env.subcategory
+        await setInputs()
+        const { utils: { log } } = Apify;
+        const startUrl = process.env.startUrl
+        const JSONfileName = process.env.JSONfileName
+        const marka = process.env.marka
+        const gender = process.env.gender
+        const category = process.env.category
+        const subcategory = process.env.subcategory
         console.log('gender', gender)
         console.log('category', category)
         console.log('marka', marka)
