@@ -4,7 +4,7 @@
  * If you're looking for examples or want to learn more, see README.
  */
 require('dotenv').config()
-require('./inputConfig')()
+
 const fs = require('fs')
 const Apify = require('apify');
 var cloudinary = require('cloudinary');
@@ -15,18 +15,18 @@ cloudinary.config({
     api_secret: process.env.cloudinary_api_secret
 });
 
-const { utils: { log } } = Apify;
-const startUrl = process.env.startUrl
-const JSONfileName = process.env.JSONfileName
-const marka = process.env.marka
-const gender = process.env.gender
-const category = process.env.category
-const subcategory = process.env.subcategory
+
 
 Apify.main(async () => {
     try {
-
-
+       await require('./inputConfig')()
+       const { utils: { log } } = Apify;
+       const startUrl = process.env.startUrl
+       const JSONfileName = process.env.JSONfileName
+       const marka = process.env.marka
+       const gender = process.env.gender
+       const category = process.env.category
+       const subcategory = process.env.subcategory
         console.log('gender', gender)
         console.log('category', category)
         console.log('marka', marka)
