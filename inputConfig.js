@@ -5,6 +5,7 @@ async function setInputs (){
     if (process.env.CLOUD==='TRUE'){
         console.log('cloud env is set')
                 const {startUrl,JSONfileName,marka,gender,category,subcategory}=await Apify.getInput();
+                
                 process.env.startUrl=startUrl
                 process.env.JSONfileName=JSONfileName
                 process.env.marka=marka
