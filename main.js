@@ -12,7 +12,7 @@ const { uploadToAtlas } = require('./atlas')
 cloudinary.config({
     cloud_name: 'codergihub',
     api_key: '583195742238215',
-    api_secret: 'mkZu56VXRtIqRI83FbX-Az1so6w'
+    api_secret: process.env.cloudinary_api_secret
 });
 
 const { utils: { log } } = Apify;
