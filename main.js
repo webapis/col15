@@ -76,6 +76,7 @@ Apify.main(async () => {
                 // Chrome with stealth should work for most websites.
                 // If it doesn't, feel free to remove this.
                 useChrome: true,
+                launchOptions:{headless:true}
 
             },
             handlePageFunction,
