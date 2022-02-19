@@ -81,7 +81,14 @@ Apify.main(async () => {
                 "--allow-insecure-localhost",
                 //  "--user-data-dir=/tmp/foo",
                 "--ignore-certificate-errors",
-                "--unsafely-treat-insecure-origin-as-secure=https://localhost:8888"]}
+                "--unsafely-treat-insecure-origin-as-secure=https://localhost:8888", 
+ 
+                '--disable-dev-shm-usage',
+                '--disable-accelerated-2d-canvas',
+                '--no-first-run',
+                '--no-zygote',
+                '--single-process', // <- this one doesn't works in Windows
+                '--disable-gpu']}
 
             },
             handlePageFunction,
