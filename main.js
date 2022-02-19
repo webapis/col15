@@ -22,7 +22,7 @@ Apify.main(async () => {
     try {
         await setInputs()
         const { utils: { log } } = Apify;
-        const startUrl = 'https://www.google.com/'//process.env.startUrl
+        const startUrl = process.env.startUrl
         const JSONfileName = process.env.JSONfileName
         const marka = process.env.marka
         const gender = process.env.gender
@@ -114,11 +114,11 @@ Apify.main(async () => {
 
         log.info('Starting the crawl.');
         await crawler.run();
-        const { items } = await dataset.getData()
+        // const { items } = await dataset.getData()
 
-        fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(items))
-        const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
-        await uploadToAtlas({ data: items })
+        // fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(items))
+        // const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
+        // await uploadToAtlas({ data: items })
         log.info('Crawl finished.');
 
     } catch (error) {
