@@ -22,7 +22,7 @@ Apify.main(async () => {
     try {
         await setInputs()
         const { utils: { log } } = Apify;
-        const startUrl = process.env.startUrl
+        const startUrl = 'https://www.google.com/'//process.env.startUrl
         const JSONfileName = process.env.JSONfileName
         const marka = process.env.marka
         const gender = process.env.gender
@@ -71,7 +71,7 @@ Apify.main(async () => {
         const crawler = new Apify.PuppeteerCrawler({
             requestList,
             requestQueue,
-            maxConcurrency: 3,
+            maxConcurrency: 1,
             launchContext: {
                 // Chrome with stealth should work for most websites.
                 // If it doesn't, feel free to remove this.
