@@ -76,7 +76,12 @@ Apify.main(async () => {
                 // Chrome with stealth should work for most websites.
                 // If it doesn't, feel free to remove this.
                 useChrome: true,
-                launchOptions:{headless:true}
+                launchOptions:{headless:true,args: ['--no-sandbox', '--disable-setuid-sandbox',      "--disable-web-security",
+                `--window-size=1200,1250`,
+                "--allow-insecure-localhost",
+                //  "--user-data-dir=/tmp/foo",
+                "--ignore-certificate-errors",
+                "--unsafely-treat-insecure-origin-as-secure=https://localhost:8888"]}
 
             },
             handlePageFunction,
