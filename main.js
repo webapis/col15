@@ -84,8 +84,8 @@ Apify.main(async () => {
                 "--unsafely-treat-insecure-origin-as-secure=https://localhost:8888", 
                 '--disable-gpu-rasterization',
                 '--disable-low-res-tiling',
-                '--disable-skia-runtime-opts ',
-                '--disable-yuv420-biplanar '
+                '--disable-skia-runtime-opts',
+                '--disable-yuv420-biplanar'
              ]}
 
             },
@@ -114,11 +114,11 @@ Apify.main(async () => {
 
         log.info('Starting the crawl.');
         await crawler.run();
-        // const { items } = await dataset.getData()
+        const { items } = await dataset.getData()
 
-        // fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(items))
-        // const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
-        // await uploadToAtlas({ data: items })
+        fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(items))
+        const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
+        await uploadToAtlas({ data: items })
         log.info('Crawl finished.');
 
     } catch (error) {
