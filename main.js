@@ -82,7 +82,11 @@ Apify.main(async () => {
                 //  "--user-data-dir=/tmp/foo",
                 "--ignore-certificate-errors",
                 "--unsafely-treat-insecure-origin-as-secure=https://localhost:8888", 
-                '--use-gl=egl']}
+                '--disable-gpu-rasterization',
+                '--disable-low-res-tiling',
+                '--disable-skia-runtime-opts ',
+                '--disable-yuv420-biplanar '
+             ]}
 
             },
             handlePageFunction,
