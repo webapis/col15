@@ -4,6 +4,7 @@ const uri = process.env.mongodb_url
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function uploadToAtlas({data}){
+
 const bulkData =data.map(d=>{
   const {imageUrl}=d
   return   {
@@ -26,6 +27,7 @@ const clnt =await client.connect()
 
   debugger;
   clnt.close()
+
 }
 
 module.exports={uploadToAtlas}
