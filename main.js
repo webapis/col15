@@ -19,7 +19,7 @@ cloudinary.config({
 
 
 Apify.main(async () => {
-    try {
+  
         await setInputs()
         const { utils: { log } } = Apify;
         const startUrl = process.env.startUrl
@@ -121,7 +121,5 @@ Apify.main(async () => {
         await uploadToAtlas({ data: items })
         log.info('Crawl finished.');
 
-    } catch (error) {
-        console.log('error', error)
-    }
+    
 });
