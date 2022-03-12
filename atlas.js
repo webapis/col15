@@ -1,10 +1,14 @@
 const { MongoClient } = require('mongodb');
 const fs =require('fs')
-const uri = process.env.mongodb_url
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 async function uploadToAtlas({data}){
-
+  try {
+    
+ 
+  const uri = process.env.mongodb_url
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  console.log('data.length...',data.length)
 const bulkData =data.map(d=>{
   const {imageUrl}=d
   return   {
@@ -27,7 +31,9 @@ const clnt =await client.connect()
 
   debugger;
   clnt.close()
-
+} catch (error) {
+    console.log('Mongo db Error')
+}
 }
 
 module.exports={uploadToAtlas}
