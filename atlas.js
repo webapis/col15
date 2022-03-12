@@ -32,7 +32,7 @@ const clnt =await client.connect()
   debugger;
   clnt.close()
 } catch (error) {
-    console.log('Mongo db Error')
+    console.log('Mongo db Error',error)
 }
 }
 

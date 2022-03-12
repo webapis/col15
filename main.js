@@ -115,6 +115,7 @@ Apify.main(async () => {
         log.info('Starting the crawl.');
         await crawler.run();
         const { items } = await dataset.getData()
+        console.log('items......',items)
 
         fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(items))
         const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
