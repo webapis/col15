@@ -28,9 +28,11 @@ Apify.main(async () => {
         const gender = process.env.gender
         const category = process.env.category
         const subcategory = process.env.subcategory
+        console.log('marka', marka)
         console.log('gender', gender)
         console.log('category', category)
-        console.log('marka', marka)
+        console.log('subcategory', subcategory)
+
         const { handler, getUrls } = require(`./handlers/${marka}`);
         const input = await Apify.getInput();
         console.log(input);
@@ -116,7 +118,7 @@ Apify.main(async () => {
         await crawler.run();
         const ds= await dataset.getData()
  
-        log.info('ds...',ds);
+     
         log.info('items...',ds.items&& ds.items.length);
      //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
         //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
