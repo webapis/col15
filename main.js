@@ -114,12 +114,12 @@ Apify.main(async () => {
 
         log.info('Starting the crawl.');
         await crawler.run();
-        const { items } = await dataset.getData()
-        console.log('items......',items)
+        const ds= await dataset.getData()
+        console.log('items......',ds.items)
 
-        fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(items))
-        const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
-        await uploadToAtlas({ data: items })
+     //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
+        //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
+        await uploadToAtlas({ data: ds.items })
         log.info('Crawl finished.');
 
     
