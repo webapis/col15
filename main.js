@@ -121,6 +121,7 @@ Apify.main(async () => {
      //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
         //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
         await uploadToAtlas({ data: ds.items })
+        log.info('items...');
         log.info('Crawl finished.');
 
     
