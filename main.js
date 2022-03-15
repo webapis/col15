@@ -127,8 +127,8 @@ async function main(props) {
         log.info('items...');
         log.info('Crawl finished.');
 
-        const { workflowEmitter } = props
-        workflowEmitter.emit('WORKFLOW_RUN_SUCCESSFUL', ...props)
+        const { workflowEmitter,workflow } = props
+        workflowEmitter.emit('WORKFLOW_RUN_SUCCESSFUL', {...workflow})
 
     });
 }
