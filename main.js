@@ -16,10 +16,9 @@ cloudinary.config({
     api_secret: process.env.cloudinary_api_secret
 });
 
+async function main(props) {
+    Apify.main(async () => {
 
-
-Apify.main(async () => {
-  
         await setInputs()
         const { utils: { log } } = Apify;
         const startUrl = process.env.startUrl
@@ -77,18 +76,20 @@ Apify.main(async () => {
             launchContext: {
                 // Chrome with stealth should work for most websites.
                 // If it doesn't, feel free to remove this.
-               // useChrome: true,
-                launchOptions:{headless:true,args: ['--no-sandbox', '--disable-setuid-sandbox',      "--disable-web-security",
-                `--window-size=1200,1250`,
-                "--allow-insecure-localhost",
-                //  "--user-data-dir=/tmp/foo",
-                "--ignore-certificate-errors",
-                "--unsafely-treat-insecure-origin-as-secure=https://localhost:8888", 
-                '--disable-gpu-rasterization',
-                '--disable-low-res-tiling',
-                '--disable-skia-runtime-opts',
-                '--disable-yuv420-biplanar'
-             ]}
+                // useChrome: true,
+                launchOptions: {
+                    headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox', "--disable-web-security",
+                        `--window-size=1200,1250`,
+                        "--allow-insecure-localhost",
+                        //  "--user-data-dir=/tmp/foo",
+                        "--ignore-certificate-errors",
+                        "--unsafely-treat-insecure-origin-as-secure=https://localhost:8888",
+                        '--disable-gpu-rasterization',
+                        '--disable-low-res-tiling',
+                        '--disable-skia-runtime-opts',
+                        '--disable-yuv420-biplanar'
+                    ]
+                }
 
             },
             handlePageFunction,
@@ -116,15 +117,21 @@ Apify.main(async () => {
 
         log.info('Starting the crawl.');
         await crawler.run();
-        const ds= await dataset.getData()
- 
-     
-        log.info('items...',ds.items&& ds.items.length);
-     //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
+        const ds = await dataset.getData()
+
+
+        log.info('items...', ds.items && ds.items.length);
+        //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
         //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
         await uploadToAtlas({ data: ds.items })
         log.info('items...');
         log.info('Crawl finished.');
 
-    
-});
+        const { workflowEmitter } = props
+        workflowEmitter.emit('WORKFLOW_RUN_SUCCESSFUL', ...props)
+
+    });
+}
+
+
+module.exports={main}
