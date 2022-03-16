@@ -16,7 +16,7 @@ cloudinary.config({
     api_secret: process.env.cloudinary_api_secret
 });
 
-function main() {
+
 
 
 
@@ -130,8 +130,5 @@ function main() {
 
 
     });
-}
 
-module.exports = {
-    main
-}
+
