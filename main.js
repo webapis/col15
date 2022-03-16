@@ -17,10 +17,7 @@ cloudinary.config({
 });
 
 
-
-
-
-    Apify.main(async () => {
+  //  Apify.main(async () => {
 
         await setInputs()
         const { utils: { log } } = Apify;
@@ -129,6 +126,6 @@ cloudinary.config({
         log.info('Crawl finished.');
 
 
-    });
+    //});
 
 
