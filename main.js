@@ -33,6 +33,7 @@ cloudinary.config({
         console.log('gender', gender)
         console.log('category', category)
         console.log('marka', marka)
+        console.log('startUrl',startUrl)
         const { handler, getUrls } = require(`./handlers/${marka}`);
         const input = await Apify.getInput();
         console.log(input);
@@ -120,7 +121,7 @@ cloudinary.config({
         await crawler.run();
         const ds = await dataset.getData()
 
-        log.info('ds...', ds);
+ 
         log.info('items...', ds.items && ds.items.length);
         //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
         //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
