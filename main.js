@@ -127,7 +127,7 @@ cloudinary.config({
         await uploadToAtlas({ data: ds.items })
 
         log.info('Crawl finished.');
-        fs.rmSync(dir, { recursive: true, force: true });
+        fs.rmSync(`${process.cwd()}/apify_storage`, { recursive: true, force: true });
 
     });
 
