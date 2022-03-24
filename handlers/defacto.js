@@ -1,6 +1,7 @@
 
 async function handler(page) {
 
+ 
 
     await page.waitForSelector('.catalog-products')
 
