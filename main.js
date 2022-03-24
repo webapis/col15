@@ -16,6 +16,8 @@ cloudinary.config({
     api_secret: process.env.cloudinary_api_secret
 });
 
+console.log('process.env.google_access_token',process.env.google_access_token)
+console.log('refresh_token: process.env.google_refresh_token ',refresh_token: process.env.google_refresh_token )
 
 Apify.main(async () => {
     const { values } = await getSheetValues({ access_token: process.env.google_access_token, spreadsheetId: '1dLiWW6P__hkmG68tnnqHZyxICwUL2CgDk1sxnmVkCKI', range: 'FEMALE!A:E', refresh_token: process.env.google_refresh_token })
