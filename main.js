@@ -4,7 +4,7 @@
  * If you're looking for examples or want to learn more, see README.
  */
 require('dotenv').config()
-const { getSheetValues } = require('./google.sheet.js')
+const { getSheetValues, setSheetValue } = require('./google.sheet.js')
 const fs = require('fs')
 const Apify = require('apify');
 var cloudinary = require('cloudinary');
@@ -16,8 +16,8 @@ cloudinary.config({
     api_secret: process.env.cloudinary_api_secret
 });
 
-console.log('process.env.google_access_token',process.env.google_access_token)
-console.log('refresh_token: process.env.google_refresh_token ',process.env.google_refresh_token)
+console.log('process.env.google_access_token', process.env.google_access_token)
+console.log('refresh_token: process.env.google_refresh_token ', process.env.google_refresh_token)
 
 Apify.main(async () => {
     const { values } = await getSheetValues({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E', refresh_token: process.env.google_refresh_token })
@@ -30,6 +30,7 @@ Apify.main(async () => {
     debugger;
     const dataset = await Apify.openDataset(`file-${Date.now()}`);
     const requestQueue = await Apify.openRequestQueue();
+    console.log('values', values)
     values.forEach((value, i) => {
         if (i > 0) {
             log.info('value', value);
@@ -38,42 +39,55 @@ Apify.main(async () => {
             const category = value[2]
             const subcategory = value[3]
             const marka = value[4]
-            log.info('startUrl.', startUrl);
-            log.info('gender.', gender);
-            log.info('category.', category);
-            log.info('subcategory.', subcategory);
-            log.info('marka.', marka);
-            requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true } })
+            console.log('startUrl.', startUrl);
+            console.log('gender.', gender);
+            console.log('category.', category);
+            console.log('subcategory.', subcategory);
+            console.log('marka.', marka);
+
+            requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true, end: false, range: `F${i + 2}` } })
         }
-        debugger;
+
 
     })
 
 
- 
+
 
     const handlePageFunction = async (context) => {
-        const { page, request: { userData: { start, marka, gender, category, subcategory },url } } = context
+        const { page, request: { userData: { start, marka, gender, category, subcategory, range, end }, url } } = context
         const pageUrl = await page.url()
 
         const { handler, getUrls } = require(`./handlers/${marka}`);
 
-        debugger;
+
         if (start) {
             const nextPageUrl = url.substring(0, url.indexOf("=") + 1)
             const pageUrls = await getUrls(page, nextPageUrl)
-
+            let order = 1
             for (let url of pageUrls) {
-                requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false } })
+
+                if (pageUrls.length === order) {
+
+                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: true, range } })
+                } else {
+
+                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: false, range } })
+                }
+
+                ++order;
             }
 
         }
         const data = await handler(page)
-        log.info('data.length', data);
-        log.info('marka', marka);
-        log.info('gender', gender);
-        log.info('category', category);
-        log.info('subcategory', subcategory);
+        if (end) {
+            debugger;
+            const { items } = await dataset.getData()
+            debugger;
+            const total = items.filter((item) => item.marka === marka && item.subcategory === subcategory)
+            const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range, refresh_token: process.env.google_refresh_token, value: total.length.toString() })
+            debugger;
+        }
 
         const mappedData = data.map(d => {
             return {
@@ -82,12 +96,12 @@ Apify.main(async () => {
                 category, subcategory
             }
         })
-        log.info('mappedData.length', mappedData.length);
-        await dataset.pushData(mappedData);
-        const dss = await dataset.getData()
-        log.info('items...ss', dss.items && dss.items.length);
 
-        //  return   
+
+        await dataset.pushData(mappedData);
+
+
+
     }
     const crawler = new Apify.PuppeteerCrawler({
         //requestList,
@@ -140,7 +154,7 @@ Apify.main(async () => {
     const ds = await dataset.getData()
 
 
-    log.info('items...', ds.items && ds.items.length);
+    console.log('items...', ds.items && ds.items.length);
     //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
     //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
     await uploadToAtlas({ data: ds.items })
