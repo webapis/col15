@@ -72,7 +72,8 @@ Apify.main(async () => {
             }
         })
         await dataset.pushData(mappedData);
-
+        const dss = await dataset.getData()
+        log.info('items...ss', dss.items && dss.items.length);
 
         //  return   
     }
