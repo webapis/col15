@@ -1,7 +1,7 @@
 
 async function handler(page) {
 
- 
+    const url =await page.url()
 
     await page.waitForSelector('.catalog-products')
 
@@ -31,27 +31,32 @@ async function handler(page) {
         }).filter(f => f.imageUrl !== null)
     })
 
-    console.log('data length_____', data.length)
+    console.log('data length_____', data.length, 'url:',url)
 
 
 
     return data
 }
-async function getUrls(page, url) {
+//document.querySelector('.catalog__meta--product-count span').textContent
+async function getUrls(page) {
+    const url =await page.url()
     await page.waitForSelector('.catalog__meta--product-count span')
     const productCount = await page.$eval('.catalog__meta--product-count span', element => parseInt(element.innerHTML))
-    const totalPages = Math.ceil(productCount / 72)
+    const totalPages = Math.ceil(productCount / 60)
     const pageUrls = []
+    debugger;
     let pagesLeft = totalPages
     for (let i = 2; i <= totalPages; i++) {
 
         console.log('i', i)
         if (pagesLeft > 0) {
 
-            pageUrls.push(`${url}` + i)
+            pageUrls.push(`${url}?page=` + i)
             --pagesLeft
         }
+        debugger;
     }
-    return pageUrls
+    debugger;
+    return {pageUrls,productCount}
 }
 module.exports = { handler, getUrls }

@@ -45,7 +45,7 @@ Apify.main(async () => {
             console.log('subcategory.', subcategory);
             console.log('marka.', marka);
 
-            requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true, end: false, range: `F${i + 1}` } })
+            requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`,startUrl } })
         }
 
 
@@ -55,7 +55,7 @@ Apify.main(async () => {
 
 
     const handlePageFunction = async (context) => {
-        const { page, request: { userData: { start, marka, gender, category, subcategory, range, end }, url } } = context
+        const { page, request: { userData: { start, marka, gender, category, subcategory, rangeG, rangeF, end,startUrl }, url } } = context
         const pageUrl = await page.url()
 
         const { handler, getUrls } = require(`./handlers/${marka}`);
@@ -63,16 +63,19 @@ Apify.main(async () => {
 
         if (start) {
             const nextPageUrl = url.substring(0, url.indexOf("=") + 1)
-            const pageUrls = await getUrls(page, nextPageUrl)
+            const { pageUrls, productCount } = await getUrls(page, nextPageUrl)
+            debugger;
+            const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range:rangeF, refresh_token: process.env.google_refresh_token, value: productCount.toString() })
+
             let order = 1
             for (let url of pageUrls) {
-
+                debugger;
                 if (pageUrls.length === order) {
 
-                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: true, range } })
+                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: true, rangeG, rangeF,startUrl } })
                 } else {
 
-                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: false, range } })
+                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: false, rangeG, rangeF,startUrl } })
                 }
 
                 ++order;
@@ -85,7 +88,8 @@ Apify.main(async () => {
             const { items } = await dataset.getData()
             debugger;
             const total = items.filter((item) => item.marka === marka && item.subcategory === subcategory)
-            const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range, refresh_token: process.env.google_refresh_token, value: total.length.toString() })
+            debugger;
+            const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range:rangeG, refresh_token: process.env.google_refresh_token, value: total.length.toString() })
             debugger;
         }
 
