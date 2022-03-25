@@ -64,7 +64,12 @@ Apify.main(async () => {
 
         }
         const data = await handler(page)
-        log.info('data.length', data.length);
+        log.info('data.length', data);
+        log.info('marka', marka);
+        log.info('gender', gender);
+        log.info('category', category);
+        log.info('subcategory', subcategory);
+
         const mappedData = data.map(d => {
             return {
                 ...d, marka,
