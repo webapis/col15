@@ -28,7 +28,7 @@ Apify.main(async () => {
     const input = await Apify.getInput();
     console.log(input);
     debugger;
-
+    const dataset = await Apify.openDataset(`file-${Date.now()}`);
     const requestQueue = await Apify.openRequestQueue();
     values.forEach((value, i) => {
         if (i > 0) {
@@ -45,7 +45,7 @@ Apify.main(async () => {
     })
 
 
-    const dataset = await Apify.openDataset(`file-${Date.now()}`);
+ 
 
     const handlePageFunction = async (context) => {
         const { page, request: { userData: { start, marka, gender, category, subcategory },url } } = context
