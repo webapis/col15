@@ -45,7 +45,7 @@ Apify.main(async () => {
             console.log('subcategory.', subcategory);
             console.log('marka.', marka);
 
-            requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true, end: false, range: `F${i + 2}` } })
+            requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true, end: false, range: `F${i + 1}` } })
         }
 
 
