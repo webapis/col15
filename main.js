@@ -38,7 +38,11 @@ Apify.main(async () => {
             const category = value[2]
             const subcategory = value[3]
             const marka = value[4]
-
+            log.info('startUrl', startUrl);
+            log.info('gender', gender);
+            log.info('category', category);
+            log.info('subcategory', subcategory);
+            log.info('marka', marka);
             requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true } })
         }
         debugger;
