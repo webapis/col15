@@ -64,6 +64,7 @@ Apify.main(async () => {
 
         }
         const data = await handler(page)
+        log.info('data.length', data.length);
         const mappedData = data.map(d => {
             return {
                 ...d, marka,
