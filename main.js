@@ -32,6 +32,7 @@ Apify.main(async () => {
     const requestQueue = await Apify.openRequestQueue();
     values.forEach((value, i) => {
         if (i > 0) {
+            log.info('value', value);
             const startUrl = value[0]
             const gender = value[1]
             const category = value[2]
