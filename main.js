@@ -71,6 +71,7 @@ Apify.main(async () => {
                 category, subcategory
             }
         })
+        log.info('mappedData.length', mappedData.length);
         await dataset.pushData(mappedData);
         const dss = await dataset.getData()
         log.info('items...ss', dss.items && dss.items.length);
