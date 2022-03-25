@@ -106,7 +106,7 @@ Apify.main(async () => {
     const crawler = new Apify.PuppeteerCrawler({
         //requestList,
         requestQueue,
-        maxConcurrency: 15,
+        maxConcurrency: 10,
         launchContext: {
             // Chrome with stealth should work for most websites.
             // If it doesn't, feel free to remove this.
