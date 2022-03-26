@@ -16,6 +16,7 @@ cloudinary.config({
     api_secret: process.env.cloudinary_api_secret
 });
 
+
 console.log('process.env.google_access_token', process.env.google_access_token)
 console.log('refresh_token: process.env.google_refresh_token ', process.env.google_refresh_token)
 
@@ -64,8 +65,8 @@ Apify.main(async () => {
         const { pageUrls, productCount, pageLength } = await getUrls(page)
 
         if (start) {
-          
-         //   await pageLengthdataset.pushData({ marka, subcategory, pageLength });
+
+            //   await pageLengthdataset.pushData({ marka, subcategory, pageLength });
             debugger;
             const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, refresh_token: process.env.google_refresh_token, value: productCount.toString() })
 
@@ -100,7 +101,7 @@ Apify.main(async () => {
 
         const pageUrlsData = await pageUrldataset.getData()
         const pageLengthData = await pageLengthdataset.getData()
-     //   const totalPages = pageLengthData.items[0].pageLength
+        //   const totalPages = pageLengthData.items[0].pageLength
         const totalScannedPages = pageUrlsData.items.length
         debugger;
         if (totalScannedPages === pageLength) {
@@ -117,7 +118,7 @@ Apify.main(async () => {
     const crawler = new Apify.PuppeteerCrawler({
         //requestList,
         requestQueue,
-        maxConcurrency: 5,
+        maxConcurrency: 10,
         launchContext: {
             // Chrome with stealth should work for most websites.
             // If it doesn't, feel free to remove this.
@@ -157,7 +158,16 @@ Apify.main(async () => {
                     }
                 });
             },
-        ]
+        ],
+        handleFailedRequestFunction: async ({ request }) => {
+            // This function is called when the crawling of a request failed too many times
+            const errorDataSet = await Apify.openDataset(`error-data`);
+            await errorDataSet.pushData({
+                url: request.url,
+                succeeded: false,
+                errors: request.errorMessages,
+            });
+        },
     });
 
     log.info('Starting the crawl.');
@@ -169,6 +179,13 @@ Apify.main(async () => {
     //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
     //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
     await uploadToAtlas({ data: ds.items })
+    const errorDataSet = await Apify.openDataset(`error-data`);
+    const { items: errorItems } = await errorDataSet.getData()
+    if (errorItems && errorItems.length > 0) {
+        errorItems.forEach(item => {
+
+        })
+    }
 
     log.info('Crawl finished.');
     fs.rmSync(`${process.cwd()}/apify_storage`, { recursive: true, force: true });
