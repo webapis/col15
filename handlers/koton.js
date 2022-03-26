@@ -37,13 +37,40 @@ async function handler(page) {
     return data
 }
 async function getUrls(page) {
-  
-   await page.waitForSelector('.plt-count')
+
+    const url = await page.url()
+    await page.waitForSelector('.plt-count')
+    const productCount =  await page.$eval('.plt-count', element => parseInt(element.textContent.replace(/[^\d]/g, "")))
+    const totalPages = Math.ceil((productCount-(191*2)) / 191)
+    const pageUrls = []
+debugger;
+    let pagesLeft = totalPages
+    for (let i = 1; i <= totalPages; i++) {
+
+        console.log('i', i)
+        if (pagesLeft > 0) {
+
+            pageUrls.push(`${url}?q=%3Arelevance&psize=192&page=` + i)
+            --pagesLeft
+        }
+     
+    }
+
+    return { pageUrls, productCount, pageLength: pageUrls.length + 1 }
+
+}
+module.exports = { handler, getUrls }
+
+
+/*
+async function getUrls(page) {
+
+    await page.waitForSelector('.plt-count')
     const productCount = await page.$eval('.plt-count', element => parseInt(element.textContent.replace(/[^\d]/g, "")))
     debugger;
     const withMultipage = await page.$('.pagingBar .paging')
     if (withMultipage) {
-       
+
         const urls = await page.evaluate(() => {
             const arr = Array.from(document.querySelector('.pagingBar .paging').querySelectorAll('a')).map(t => t.href)
             const remdub = arr.filter(function (item, pos) {
@@ -63,11 +90,12 @@ async function getUrls(page) {
                 }
             }
 
-            return   pageUrls
+            return pageUrls
         })
-        return {pageUrls: urls, productCount }
+        return { pageUrls: urls, productCount, pageLength: urls.length + 1 }
     } else
-        return { pageUrls: [], productCount }
+        return { pageUrls: [], productCount, pageLength: 1 }
 
 }
 module.exports = { handler, getUrls }
+*/

@@ -21,13 +21,13 @@ console.log('refresh_token: process.env.google_refresh_token ', process.env.goog
 
 Apify.main(async () => {
     const { values } = await getSheetValues({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E', refresh_token: process.env.google_refresh_token })
-    debugger;
+
     await setInputs()
     const { utils: { log } } = Apify;
 
     const input = await Apify.getInput();
     console.log(input);
-    debugger;
+
     const dataset = await Apify.openDataset(`file-${Date.now()}`);
     const requestQueue = await Apify.openRequestQueue();
     console.log('values', values)
@@ -45,7 +45,7 @@ Apify.main(async () => {
             console.log('subcategory.', subcategory);
             console.log('marka.', marka);
 
-            requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`,startUrl } })
+            requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`, startUrl } })
         }
 
 
@@ -55,27 +55,29 @@ Apify.main(async () => {
 
 
     const handlePageFunction = async (context) => {
-        const { page, request: { userData: { start, marka, gender, category, subcategory, rangeG, rangeF, end,startUrl }, url } } = context
+        const { page, request: { userData: { start, marka, gender, category, subcategory, rangeG, rangeF, end, startUrl }, url } } = context
         const pageUrl = await page.url()
-
+        const pageUrldataset = await Apify.openDataset(`${subcategory}-${marka}`);
+        const pageLengthdataset = await Apify.openDataset(`${subcategory}-${marka}-page-length`);
+        await pageUrldataset.pushData({ marka, subcategory, pageUrl });
         const { handler, getUrls } = require(`./handlers/${marka}`);
-
+        const { pageUrls, productCount, pageLength } = await getUrls(page)
 
         if (start) {
-            const nextPageUrl = url.substring(0, url.indexOf("=") + 1)
-            const { pageUrls, productCount } = await getUrls(page, nextPageUrl)
+          
+         //   await pageLengthdataset.pushData({ marka, subcategory, pageLength });
             debugger;
-            const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range:rangeF, refresh_token: process.env.google_refresh_token, value: productCount.toString() })
+            const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, refresh_token: process.env.google_refresh_token, value: productCount.toString() })
 
             let order = 1
             for (let url of pageUrls) {
                 debugger;
                 if (pageUrls.length === order) {
 
-                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: true, rangeG, rangeF,startUrl } })
+                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: true, rangeG, rangeF, startUrl } })
                 } else {
 
-                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: false, rangeG, rangeF,startUrl } })
+                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: false, rangeG, rangeF, startUrl } })
                 }
 
                 ++order;
@@ -83,15 +85,7 @@ Apify.main(async () => {
 
         }
         const data = await handler(page)
-        if (end) {
-            debugger;
-            const { items } = await dataset.getData()
-            debugger;
-            const total = items.filter((item) => item.marka === marka && item.subcategory === subcategory)
-            debugger;
-            const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range:rangeG, refresh_token: process.env.google_refresh_token, value: total.length.toString() })
-            debugger;
-        }
+
 
         const mappedData = data.map(d => {
             return {
@@ -104,13 +98,26 @@ Apify.main(async () => {
 
         await dataset.pushData(mappedData);
 
-
-
+        const pageUrlsData = await pageUrldataset.getData()
+        const pageLengthData = await pageLengthdataset.getData()
+     //   const totalPages = pageLengthData.items[0].pageLength
+        const totalScannedPages = pageUrlsData.items.length
+        debugger;
+        if (totalScannedPages === pageLength) {
+            console.log('total length match')
+            debugger;
+            const { items } = await dataset.getData()
+            debugger;
+            const total = items.filter((item) => item.marka === marka && item.subcategory === subcategory)
+            debugger;
+            const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeG, refresh_token: process.env.google_refresh_token, value: total.length.toString() })
+            debugger;
+        }
     }
     const crawler = new Apify.PuppeteerCrawler({
         //requestList,
         requestQueue,
-        maxConcurrency: 10,
+        maxConcurrency: 5,
         launchContext: {
             // Chrome with stealth should work for most websites.
             // If it doesn't, feel free to remove this.

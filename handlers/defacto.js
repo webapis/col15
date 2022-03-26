@@ -1,7 +1,7 @@
 
 async function handler(page) {
 
-    const url =await page.url()
+    const url = await page.url()
 
     await page.waitForSelector('.catalog-products')
 
@@ -21,17 +21,17 @@ async function handler(page) {
                 priceOld: priceOld ? priceOld.replace(',', '.').trim() : 0,
                 priceNew: priceNew ? priceNew.replace(',', '.').trim() : 0,
                 priceBasket: priceBasket ? priceBasket.replace(',', '.').trim() : 0,
-                basketDiscount: basketDiscount?basketDiscount:0,
+                basketDiscount: basketDiscount ? basketDiscount : 0,
                 imageUrl: imageUrl && 'https:' + imageUrl.substring(imageUrl.lastIndexOf('//'), imageUrl.lastIndexOf('.jpg') + 4),
                 link: productCard.querySelector('.catalog-products .product-card .product-card__image .image-box a').href,
                 timestamp: Date.now(),
                 plcHolder: "https://dfcdn.defacto.com.tr/AssetsV2/dist/img/placeholders/placeholder.svg",
-                discPerc:discPerc?discPerc:0
+                discPerc: discPerc ? discPerc : 0
             }
         }).filter(f => f.imageUrl !== null)
     })
 
-    console.log('data length_____', data.length, 'url:',url)
+    console.log('data length_____', data.length, 'url:', url)
 
 
 
@@ -39,12 +39,12 @@ async function handler(page) {
 }
 //document.querySelector('.catalog__meta--product-count span').textContent
 async function getUrls(page) {
-    const url =await page.url()
+    const url = await page.url()
     await page.waitForSelector('.catalog__meta--product-count span')
     const productCount = await page.$eval('.catalog__meta--product-count span', element => parseInt(element.innerHTML))
     const totalPages = Math.ceil(productCount / 60)
     const pageUrls = []
-    debugger;
+
     let pagesLeft = totalPages
     for (let i = 2; i <= totalPages; i++) {
 
@@ -54,9 +54,9 @@ async function getUrls(page) {
             pageUrls.push(`${url}?page=` + i)
             --pagesLeft
         }
-        debugger;
+     
     }
-    debugger;
-    return {pageUrls,productCount}
+
+    return { pageUrls, productCount, pageLength: pageUrls.length + 1 }
 }
 module.exports = { handler, getUrls }

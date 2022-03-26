@@ -8,7 +8,7 @@ async function getSheetValues({ access_token, spreadsheetId, range, refresh_toke
   let data = JSON.parse(sheetresponse)
   const error = data['error']
   if (error) {
-    debugger;
+
     //refresh token
     const authresponse = await nodeFetch({ host: 'workflow-runner.netlify.app', path: `/.netlify/functions/google-refresh?refresh_token=${refresh_token}`, method: 'get', headers: { 'User-Agent': 'node.js', 'Content-Type': 'application/json' } })
     let authData = JSON.parse(authresponse)
