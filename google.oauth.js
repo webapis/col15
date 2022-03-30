@@ -2,12 +2,13 @@ const { fbRest } = require('../firebase-rest')
 const fetch = require('node-fetch')
 const fbDatabase = fbRest()
 async function getGoogleToken() {
-debugger;
+  debugger;
   const selectedWorkspace = process.env.selectedWorkspace
 
-  const {inc:currenttimestamp} = await fbDatabase.ref("/").update({ inc: { ".sv": "timestamp" } })
-debugger;
-  if ((parseInt( process.env.google_expires_in) * 1000 +parseInt( process.env.google_timestamp)) > currenttimestamp) {
+  const { inc: currenttimestamp } = await fbDatabase.ref("/").update({ inc: { ".sv": "timestamp" } })
+  const issuetime = parseInt(process.env.google_expires_in) * 1000 + parseInt(process.env.google_timestamp)
+  debugger;
+  if (issuetime > currenttimestamp) {
     debugger;
     //refresh token
     const fetchpath = `https://workflow-runner.netlify.app/.netlify/functions/google-refresh?refresh_token=${process.env.google_refresh_token}`
