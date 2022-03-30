@@ -24,7 +24,7 @@ console.log('refresh_token: process.env.google_refresh_token ', process.env.goog
 Apify.main(async () => {
     console.log('apify.main.js is loading...')
     debugger;
-   const google_access_token= await global.getGoogleToken()
+   const google_access_token= await process.env.getGoogleToken()
    debugger;
     const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E' })
 debugger;
