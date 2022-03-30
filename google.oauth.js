@@ -5,7 +5,7 @@ async function getGoogleToken() {
 debugger;
   const selectedWorkspace = process.env.selectedWorkspace
 
-  const currenttimestamp = await fbDatabase.ref("/").update({ inc: { ".sv": "timestamp" } })
+  const {inc:currenttimestamp} = await fbDatabase.ref("/").update({ inc: { ".sv": "timestamp" } })
 
   if ((parseInt( process.env.google_expires_in) * 1000 +parseInt( process.env.google_timestamp)) > currenttimestamp) {
     debugger;
