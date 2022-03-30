@@ -7,14 +7,14 @@ require('dotenv').config()
 const { getSheetValues, setSheetValue } = require('./google.sheet.js')
 const fs = require('fs')
 const Apify = require('apify');
-var cloudinary = require('cloudinary');
+//var cloudinary = require('cloudinary');
 const { uploadToAtlas } = require('./atlas')
 const { setInputs } = require('./inputConfig')
-cloudinary.config({
-    cloud_name: 'codergihub',
-    api_key: '583195742238215',
-    api_secret: process.env.cloudinary_api_secret
-});
+// cloudinary.config({
+//     cloud_name: 'codergihub',
+//     api_key: '583195742238215',
+//     api_secret: process.env.cloudinary_api_secret
+// });
 
 
 console.log('process.env.google_access_token', process.env.google_access_token)
@@ -67,6 +67,7 @@ Apify.main(async () => {
 
         if (start) {
             const google_access_token= await global.getGoogleToken()
+            debugger;
             //   await pageLengthdataset.pushData({ marka, subcategory, pageLength });
             debugger;
             const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, value: productCount.toString() })
