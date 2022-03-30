@@ -3,15 +3,13 @@
  * Use this to bootstrap your projects using the most up-to-date code.
  * If you're looking for examples or want to learn more, see README.
  */
- const {
-workerData
-  } = require('worker_threads');
+const {getGoogleToken}=require()
 console.log('main.js is loading...')
 require('dotenv').config()
 const { getSheetValues, setSheetValue } = require('./google.sheet.js')
 const fs = require('fs')
 const Apify = require('apify');
-const {getGoogleToken}=workerData
+
 debugger;
 //var cloudinary = require('cloudinary');
 const { uploadToAtlas } = require('./atlas')
