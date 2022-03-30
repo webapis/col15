@@ -3,6 +3,7 @@
  * Use this to bootstrap your projects using the most up-to-date code.
  * If you're looking for examples or want to learn more, see README.
  */
+console.log('main.js is loading...')
 require('dotenv').config()
 const { getSheetValues, setSheetValue } = require('./google.sheet.js')
 const fs = require('fs')
@@ -21,9 +22,12 @@ console.log('process.env.google_access_token', process.env.google_access_token)
 console.log('refresh_token: process.env.google_refresh_token ', process.env.google_refresh_token)
 
 Apify.main(async () => {
+    console.log('apify.main.js is loading...')
+    debugger;
    const google_access_token= await global.getGoogleToken()
+   debugger;
     const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E' })
-
+debugger;
     await setInputs()
     const { utils: { log } } = Apify;
 
