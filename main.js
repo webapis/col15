@@ -73,7 +73,7 @@ debugger;
         const { pageUrls, productCount, pageLength } = await getUrls(page)
 
         if (start) {
-            const google_access_token= await global.getGoogleToken()
+            const google_access_token= await getGoogleToken()
             debugger;
             //   await pageLengthdataset.pushData({ marka, subcategory, pageLength });
             debugger;
@@ -114,7 +114,7 @@ debugger;
         const totalScannedPages = pageUrlsData.items.length
         debugger;
         if (totalScannedPages === pageLength) {
-            const google_access_token= await global.getGoogleToken()
+            const google_access_token= await getGoogleToken()
             console.log('total length match')
             debugger;
             const { items } = await dataset.getData()
