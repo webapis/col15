@@ -3,11 +3,16 @@
  * Use this to bootstrap your projects using the most up-to-date code.
  * If you're looking for examples or want to learn more, see README.
  */
+ const {
+workerData
+  } = require('worker_threads');
 console.log('main.js is loading...')
 require('dotenv').config()
 const { getSheetValues, setSheetValue } = require('./google.sheet.js')
 const fs = require('fs')
 const Apify = require('apify');
+const {getGoogleToken}=workerData
+debugger;
 //var cloudinary = require('cloudinary');
 const { uploadToAtlas } = require('./atlas')
 const { setInputs } = require('./inputConfig')
@@ -24,7 +29,7 @@ console.log('refresh_token: process.env.google_refresh_token ', process.env.goog
 Apify.main(async () => {
     console.log('apify.main.js is loading...')
     debugger;
-   const google_access_token= await process.env.getGoogleToken()
+   const google_access_token= await getGoogleToken()
    debugger;
     const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E' })
 debugger;
