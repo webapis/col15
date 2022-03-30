@@ -6,7 +6,7 @@ debugger;
   const selectedWorkspace = process.env.selectedWorkspace
 
   const {inc:currenttimestamp} = await fbDatabase.ref("/").update({ inc: { ".sv": "timestamp" } })
-
+debugger;
   if ((parseInt( process.env.google_expires_in) * 1000 +parseInt( process.env.google_timestamp)) > currenttimestamp) {
     debugger;
     //refresh token
