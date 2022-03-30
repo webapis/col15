@@ -3,7 +3,7 @@
  * Use this to bootstrap your projects using the most up-to-date code.
  * If you're looking for examples or want to learn more, see README.
  */
-const {getGoogleToken}=require()
+const {getGoogleToken}=require('./google.oauth')
 console.log('main.js is loading...')
 require('dotenv').config()
 const { getSheetValues, setSheetValue } = require('./google.sheet.js')

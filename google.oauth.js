@@ -14,7 +14,7 @@ debugger;
     const authresponse = await fetch(fetchpath, { method: 'GET', headers: { 'User-Agent': 'node.js', 'Content-Type': 'application/json' } })
     let authData = await authresponse.json()
     const update = { scope, timestamp: { '.sv': "timestamp" }, ...authData }
-    const path = `oauth/users/${process.env.uid}/workspaces/${selectedWorkspace}/auth/google`
+    const path = `oauth/users/${process.env.localId}/workspaces/${selectedWorkspace}/auth/google`
 
     const data = await fbDatabase.ref(path).update(update)
 
