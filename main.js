@@ -21,7 +21,8 @@ console.log('process.env.google_access_token', process.env.google_access_token)
 console.log('refresh_token: process.env.google_refresh_token ', process.env.google_refresh_token)
 
 Apify.main(async () => {
-    const { values } = await getSheetValues({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E', refresh_token: process.env.google_refresh_token })
+   const google_access_token= await global.getGoogleToken()
+    const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E' })
 
     await setInputs()
     const { utils: { log } } = Apify;
@@ -65,10 +66,10 @@ Apify.main(async () => {
         const { pageUrls, productCount, pageLength } = await getUrls(page)
 
         if (start) {
-
+            const google_access_token= await global.getGoogleToken()
             //   await pageLengthdataset.pushData({ marka, subcategory, pageLength });
             debugger;
-            const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, refresh_token: process.env.google_refresh_token, value: productCount.toString() })
+            const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, value: productCount.toString() })
 
             let order = 1
             for (let url of pageUrls) {
@@ -105,13 +106,14 @@ Apify.main(async () => {
         const totalScannedPages = pageUrlsData.items.length
         debugger;
         if (totalScannedPages === pageLength) {
+            const google_access_token= await global.getGoogleToken()
             console.log('total length match')
             debugger;
             const { items } = await dataset.getData()
             debugger;
             const total = items.filter((item) => item.marka === marka && item.subcategory === subcategory)
             debugger;
-            const response = await setSheetValue({ access_token: process.env.google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeG, refresh_token: process.env.google_refresh_token, value: total.length.toString() })
+            const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeG, value: total.length.toString() })
             debugger;
         }
     }
