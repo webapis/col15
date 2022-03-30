@@ -4,6 +4,8 @@ async function getSheetValues({ access_token, spreadsheetId, range }) {
   const sheetresponse = await nodeFetch({ host: 'sheets.googleapis.com', path: `/v4/spreadsheets/${spreadsheetId}/values/${range}`, method: 'get', headers: { 'User-Agent': 'node.js', 'Content-Type': 'application/json', 'Authorization': `Bearer ${access_token}` } })
 debugger;
   let data = JSON.parse(sheetresponse)
+  console.log('sheet access_token........',access_token)
+  console.log('sheet response........',data)
 debugger;
   return data
 
