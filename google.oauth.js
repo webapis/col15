@@ -13,7 +13,7 @@ debugger;
     const fetchpath = `https://workflow-runner.netlify.app/.netlify/functions/google-refresh?refresh_token=${process.env.google_refresh_token}`
     const authresponse = await fetch(fetchpath, { method: 'GET', headers: { 'User-Agent': 'node.js', 'Content-Type': 'application/json' } })
     let authData = await authresponse.json()
-    const update = { scope, timestamp: { '.sv': "timestamp" }, ...authData }
+    const update = { timestamp: { '.sv': "timestamp" }, ...authData }
     const path = `oauth/users/${process.env.localId}/workspaces/${selectedWorkspace}/auth/google`
 
     const data = await fbDatabase.ref(path).update(update)
