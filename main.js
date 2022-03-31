@@ -28,6 +28,7 @@ Apify.main(async () => {
     console.log('apify.main.js is loading...')
     debugger;
    const google_access_token= await getGoogleToken()
+   console.log('google_access_token 1',google_access_token)
    debugger;
     const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E' })
 debugger;
@@ -74,6 +75,7 @@ debugger;
 
         if (start) {
             const google_access_token= await getGoogleToken()
+            console.log('google_access_token 2',google_access_token)
             debugger;
             //   await pageLengthdataset.pushData({ marka, subcategory, pageLength });
             debugger;
@@ -115,6 +117,7 @@ debugger;
         debugger;
         if (totalScannedPages === pageLength) {
             const google_access_token= await getGoogleToken()
+            console.log('google_access_token 2',google_access_token)
             console.log('total length match')
             debugger;
             const { items } = await dataset.getData()
