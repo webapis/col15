@@ -8,7 +8,7 @@ async function getGoogleToken() {
   const { inc: currenttimestamp } = await fbDatabase.ref("/").update({ inc: { ".sv": "timestamp" } })
   const issuetime = parseInt(process.env.google_expires_in) * 1000 + parseInt(process.env.google_timestamp)
   debugger;
-  if (issuetime<currenttimestamp) {
+  if (true) {
     debugger;
     //refresh token
     const fetchpath = `https://workflow-runner.netlify.app/.netlify/functions/google-refresh?refresh_token=${process.env.google_refresh_token}`
@@ -21,7 +21,7 @@ async function getGoogleToken() {
     const data = await fbDatabase.ref(path).update(update)
 
     process.env.google_access_token = authData.access_token
-    process.env.google_refresh_token = authData.refresh_token
+    process.env.google_refresh_token = authData.refresh_token ?   authData.refresh_token :  process.env.google_refresh_token
     process.env.google_expires_in = authData.expires_in
     process.env.google_timestamp = data.timestamp
     return process.env.google_access_token
