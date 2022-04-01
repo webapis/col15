@@ -45,15 +45,8 @@ debugger;
         if (i > 0) {
             log.info('value', value);
             const startUrl = value[0]
-            // const gender = value[1]
-            // const category = value[2]
-            // const subcategory = value[3]
-            // const marka = value[4]
-            console.log('startUrl.', startUrl);
-            console.log('gender.', gender);
-            console.log('category.', category);
-            console.log('subcategory.', subcategory);
-            console.log('marka.', marka);
+     
+  
 
             requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`, startUrl } })
         }
@@ -68,7 +61,7 @@ debugger;
         const { page, request: { userData: { start, marka, gender, category, subcategory, rangeG, rangeF, end, startUrl }, url } } = context
         const pageUrl = await page.url()
         const pageUrldataset = await Apify.openDataset(`${subcategory}-${marka}`);
-      //  const pageLengthdataset = await Apify.openDataset(`${subcategory}-${marka}-page-length`);
+  
         await pageUrldataset.pushData({ marka, subcategory, pageUrl });
         const { handler, getUrls } = require(`./handlers/${marka}`);
         const { pageUrls, productCount, pageLength } = await getUrls(page)
