@@ -15,7 +15,7 @@ async function handler(page) {
             const discount1Badge = productCard.querySelector('.vl-2ye-50indirim-badge img') ? true : false
             const priceNew = firstPrice || newPrice
             const discPerc = insteadPrice ? Math.floor(((parseInt(insteadPrice) - parseInt(priceNew)) * 100) / parseInt(insteadPrice)) : null
-            const gender =window.location.href.substring(window.location.href.indexOf('.com/tr/')+8,window. location. href.indexOf('/c/'))
+            const gender =window.location.href.substring(window.location.href.indexOf('.com/tr/')+8,window. location. href.indexOf('/c/')).replace('i','ı')
             return {
                 title: productCard.querySelector('.prc-name').innerText,
                 priceOld: insteadPrice,
