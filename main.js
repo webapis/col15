@@ -96,7 +96,12 @@ debugger;
 
 
         await dataset.pushData(data);
-
+        const { items } = await dataset.getData()
+            debugger;
+            const total = items.filter((item) => item.marka === marka)
+            debugger;
+            const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeG, value: total.length.toString() })
+            debugger;
         const pageUrlsData = await pageUrldataset.getData()
 
         const totalScannedPages = pageUrlsData.items.length
@@ -106,12 +111,7 @@ debugger;
             console.log('google_access_token 2',google_access_token)
             console.log('total length match')
             debugger;
-            const { items } = await dataset.getData()
-            debugger;
-            const total = items.filter((item) => item.marka === marka)
-            debugger;
-            const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeG, value: total.length.toString() })
-            debugger;
+    
         }
     }
     const crawler = new Apify.PuppeteerCrawler({
