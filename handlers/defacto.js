@@ -52,7 +52,6 @@ async function getUrls(page) {
     let pagesLeft = totalPages
     for (let i = 2; i <= totalPages; i++) {
 
-        console.log('i', i)
         if (pagesLeft > 0) {
 
             pageUrls.push(`${url}?page=` + i)
