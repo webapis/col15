@@ -16,7 +16,9 @@ async function handler(page) {
             const priceBasket = productCard.querySelector('.product-card__price--basket>.sale') && productCard.querySelector('.product-card__price--basket>.sale').textContent.trim().replace('₺', '').replace('TL', '')
             const basketDiscount = productCard.querySelector('.product-card__price--basket span') && productCard.querySelector('.product-card__price--basket span').innerText.replace(/(\D+)/g, '')
             const discPerc = priceOld ? Math.floor(((parseInt(priceOld) - parseInt(priceNew)) * 100) / parseInt(priceOld)) : null
-            return {
+            const gender =productCard.querySelector('[data-category]').getAttribute('data-gender').toLowerCase()
+           
+                return {
                 title,
                 priceOld: priceOld ? priceOld.replace(',', '.').trim() : 0,
                 priceNew: priceNew ? priceNew.replace(',', '.').trim() : 0,
@@ -26,7 +28,9 @@ async function handler(page) {
                 link: productCard.querySelector('.catalog-products .product-card .product-card__image .image-box a').href,
                 timestamp: Date.now(),
                 plcHolder: "https://dfcdn.defacto.com.tr/AssetsV2/dist/img/placeholders/placeholder.svg",
-                discPerc: discPerc ? discPerc : 0
+                discPerc: discPerc ? discPerc : 0,
+                marka:'defacto',
+                gender
             }
         }).filter(f => f.imageUrl !== null)
     })

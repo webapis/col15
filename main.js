@@ -45,10 +45,10 @@ debugger;
         if (i > 0) {
             log.info('value', value);
             const startUrl = value[0]
-            const gender = value[1]
-            const category = value[2]
-            const subcategory = value[3]
-            const marka = value[4]
+            // const gender = value[1]
+            // const category = value[2]
+            // const subcategory = value[3]
+            // const marka = value[4]
             console.log('startUrl.', startUrl);
             console.log('gender.', gender);
             console.log('category.', category);
@@ -68,7 +68,7 @@ debugger;
         const { page, request: { userData: { start, marka, gender, category, subcategory, rangeG, rangeF, end, startUrl }, url } } = context
         const pageUrl = await page.url()
         const pageUrldataset = await Apify.openDataset(`${subcategory}-${marka}`);
-        const pageLengthdataset = await Apify.openDataset(`${subcategory}-${marka}-page-length`);
+      //  const pageLengthdataset = await Apify.openDataset(`${subcategory}-${marka}-page-length`);
         await pageUrldataset.pushData({ marka, subcategory, pageUrl });
         const { handler, getUrls } = require(`./handlers/${marka}`);
         const { pageUrls, productCount, pageLength } = await getUrls(page)
@@ -76,10 +76,9 @@ debugger;
         if (start) {
             const google_access_token= await getGoogleToken()
             console.log('google_access_token 2',google_access_token)
+ 
             debugger;
-            //   await pageLengthdataset.pushData({ marka, subcategory, pageLength });
-            debugger;
-            const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, value: productCount.toString() })
+        const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, value: productCount.toString() })
 
             let order = 1
             for (let url of pageUrls) {
@@ -99,20 +98,19 @@ debugger;
         const data = await handler(page)
 
 
-        const mappedData = data.map(d => {
-            return {
-                ...d, marka,
-                gender,
-                category, subcategory
-            }
-        })
+        // const mappedData = data.map(d => {
+        //     return {
+        //         ...d, marka,
+        //         gender,
+        //         category, subcategory
+        //     }
+        // })
 
 
-        await dataset.pushData(mappedData);
+        await dataset.pushData(data);
 
         const pageUrlsData = await pageUrldataset.getData()
-        const pageLengthData = await pageLengthdataset.getData()
-        //   const totalPages = pageLengthData.items[0].pageLength
+
         const totalScannedPages = pageUrlsData.items.length
         debugger;
         if (totalScannedPages === pageLength) {
