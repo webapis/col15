@@ -48,7 +48,7 @@ debugger;
      
   
 
-            requestQueue.addRequest({ url: startUrl, userData: { marka, category, subcategory, gender, start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`, startUrl } })
+            requestQueue.addRequest({ url: startUrl, userData: { start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`, startUrl } })
         }
 
 
@@ -58,9 +58,9 @@ debugger;
 
 
     const handlePageFunction = async (context) => {
-        const { page, request: { userData: { start, marka, gender, category, subcategory, rangeG, rangeF, end, startUrl }, url } } = context
+        const { page, request: { userData: { start, rangeG, rangeF, end, startUrl }, url } } = context
         const pageUrl = await page.url()
-        const pageUrldataset = await Apify.openDataset(`${subcategory}-${marka}`);
+        const pageUrldataset = await Apify.openDataset(`temp-data`);
   
         await pageUrldataset.pushData({ marka, subcategory, pageUrl });
         const { handler, getUrls } = require(`./handlers/${marka}`);
@@ -78,10 +78,10 @@ debugger;
                 debugger;
                 if (pageUrls.length === order) {
 
-                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: true, rangeG, rangeF, startUrl } })
+                    requestQueue.addRequest({ url, userData: { start: false, end: true, rangeG, rangeF, startUrl } })
                 } else {
 
-                    requestQueue.addRequest({ url, userData: { marka, category, subcategory, gender, start: false, end: false, rangeG, rangeF, startUrl } })
+                    requestQueue.addRequest({ url, userData: {  start: false, end: false, rangeG, rangeF, startUrl } })
                 }
 
                 ++order;
