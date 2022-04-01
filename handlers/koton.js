@@ -2,7 +2,7 @@
 async function handler(page) {
 
     await page.waitForSelector('.productGrid .product-item')
-
+   
     const data = await page.evaluate(() => {
         const productCards = Array.from(document.querySelectorAll('.productGrid .product-item')).filter(a => a.querySelector('.image img') !== null && a.querySelector('.image img').getAttribute('data-src') !== null)
         return productCards.map(productCard => {
@@ -15,6 +15,7 @@ async function handler(page) {
             const discount1Badge = productCard.querySelector('.vl-2ye-50indirim-badge img') ? true : false
             const priceNew = firstPrice || newPrice
             const discPerc = insteadPrice ? Math.floor(((parseInt(insteadPrice) - parseInt(priceNew)) * 100) / parseInt(insteadPrice)) : null
+            const gender =hd.substring(window.location.href.indexOf('.com/tr/')+8,window. location. href.indexOf('/c/'))
             return {
                 title: productCard.querySelector('.prc-name').innerText,
                 priceOld: insteadPrice,
@@ -26,7 +27,9 @@ async function handler(page) {
                 link: productCard.querySelector('.prc-name').href,
                 timestamp: Date.now(),
                 plcHolder: "http://img-kotonw.mncdn.com/_ui/shared/images/koton-loading-gif2.gif",
-                discPerc
+                discPerc,
+                gender,
+                marka:'koton'
             }
         })//.filter(f => f.imageUrl !== null)
 
