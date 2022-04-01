@@ -50,7 +50,7 @@ debugger;
     let pagesLeft = totalPages
     for (let i = 1; i <= totalPages; i++) {
 
-        console.log('i', i)
+     
         if (pagesLeft > 0) {
 
             pageUrls.push(`${url}?q=%3Arelevance&psize=192&page=` + i)
