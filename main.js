@@ -45,10 +45,11 @@ debugger;
         if (i > 0) {
             log.info('value', value);
             const startUrl = value[0]
-     
+             const marka = value[1]
+
   
 
-            requestQueue.addRequest({ url: startUrl, userData: { start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`, startUrl } })
+            requestQueue.addRequest({ url: startUrl, userData: { marka, start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`, startUrl } })
         }
 
 
@@ -58,11 +59,11 @@ debugger;
 
 
     const handlePageFunction = async (context) => {
-        const { page, request: { userData: { start, rangeG, rangeF, end, startUrl }, url } } = context
+        const { page, request: { userData: { start, marka, rangeG, rangeF, end, startUrl }, url } } = context
         const pageUrl = await page.url()
-        const pageUrldataset = await Apify.openDataset(`temp-data`);
-  
-        await pageUrldataset.pushData({ marka, subcategory, pageUrl });
+        const pageUrldataset = await Apify.openDataset(`${marka}`);
+ 
+        await pageUrldataset.pushData({ marka, pageUrl });
         const { handler, getUrls } = require(`./handlers/${marka}`);
         const { pageUrls, productCount, pageLength } = await getUrls(page)
 
@@ -78,10 +79,10 @@ debugger;
                 debugger;
                 if (pageUrls.length === order) {
 
-                    requestQueue.addRequest({ url, userData: { start: false, end: true, rangeG, rangeF, startUrl } })
+                    requestQueue.addRequest({ url, userData: { marka,  start: false, end: true, rangeG, rangeF, startUrl } })
                 } else {
 
-                    requestQueue.addRequest({ url, userData: {  start: false, end: false, rangeG, rangeF, startUrl } })
+                    requestQueue.addRequest({ url, userData: { marka,  start: false, end: false, rangeG, rangeF, startUrl } })
                 }
 
                 ++order;
@@ -91,13 +92,7 @@ debugger;
         const data = await handler(page)
 
 
-        // const mappedData = data.map(d => {
-        //     return {
-        //         ...d, marka,
-        //         gender,
-        //         category, subcategory
-        //     }
-        // })
+  
 
 
         await dataset.pushData(data);
@@ -113,7 +108,7 @@ debugger;
             debugger;
             const { items } = await dataset.getData()
             debugger;
-            const total = items.filter((item) => item.marka === marka && item.subcategory === subcategory)
+            const total = items.filter((item) => item.marka === marka)
             debugger;
             const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeG, value: total.length.toString() })
             debugger;
