@@ -25,7 +25,7 @@ async function handler(page) {
                 priceBasket: '',
                 imageUrl: imageUrl,
                 link: productCard.querySelector('.prc-name').href,
-                timestamp:  Date.now().toISOString(),
+                timestamp:  new Date().toISOString(),
                 plcHolder: "http://img-kotonw.mncdn.com/_ui/shared/images/koton-loading-gif2.gif",
                 discPerc,
                 gender,
