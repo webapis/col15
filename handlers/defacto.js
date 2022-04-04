@@ -26,7 +26,7 @@ async function handler(page) {
                 basketDiscount: basketDiscount ? basketDiscount : 0,
                 imageUrl: imageUrl && 'https:' + imageUrl.substring(imageUrl.lastIndexOf('//'), imageUrl.lastIndexOf('.jpg') + 4),
                 link: productCard.querySelector('.catalog-products .product-card .product-card__image .image-box a').href,
-                timestamp: Date.now().toISOString(),
+                timestamp: new Date().toISOString(),
                 plcHolder: "https://dfcdn.defacto.com.tr/AssetsV2/dist/img/placeholders/placeholder.svg",
                 discPerc: discPerc ? discPerc : 0,
                 marka:'defacto',
