@@ -15,6 +15,7 @@
 		"eslint": "^7.0.0"
 	},
 	"scripts": {
+		"snipe":"node snipe.js",
 		"start": "node main.js",
 		"defacto": "apify run -p",
 		"koton": "set startUrl=https://www.koton.com/tr/erkek/giyim/ust-giyim/gomlek/c/M01-C01-N01-AK101-K100059&& set JSONfileName=defacto-erkek-gomlek && set marka=defacto&& set gender=erkek&&set category=giyim&&set subcategory=gomlek&&apify run -p",

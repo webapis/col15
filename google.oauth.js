@@ -11,6 +11,7 @@ async function getGoogleToken() {
   if (issuetime<currenttimestamp) {
     debugger;
     //refresh token
+    console.log('process.env.google_refresh_token_2......',process.env.google_refresh_token)
     const fetchpath = `https://workflow-runner.netlify.app/.netlify/functions/google-refresh?refresh_token=${process.env.google_refresh_token}`
     const authresponse = await fetch(fetchpath, { method: 'GET', headers: { 'User-Agent': 'node.js', 'Content-Type': 'application/json' } })
     let authData = await authresponse.json()
