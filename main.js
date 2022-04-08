@@ -46,13 +46,8 @@ debugger;
             log.info('value', value);
             const startUrl = value[0]
              const marka = value[1]
-
-  
-
             requestQueue.addRequest({ url: startUrl, userData: { marka, start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`, startUrl } })
         }
-
-
     })
 
 
