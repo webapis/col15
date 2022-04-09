@@ -5,7 +5,7 @@
  */
  console.log('main.js is loading...')
  require('dotenv').config()
-const {getGoogleToken}= request('wflows')
+const {getGoogleToken}= require('wflows')
 
 
 const { getSheetValues, setSheetValue } = require('./google.sheet.js')
@@ -16,7 +16,7 @@ debugger;
 //var cloudinary = require('cloudinary');
 const { uploadToAtlas } = require('./atlas')
 const { setInputs } = require('./inputConfig')
-const { request } = require('http')
+
 // cloudinary.config({
 //     cloud_name: 'codergihub',
 //     api_key: '583195742238215',
