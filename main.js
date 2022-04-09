@@ -3,9 +3,11 @@
  * Use this to bootstrap your projects using the most up-to-date code.
  * If you're looking for examples or want to learn more, see README.
  */
-const {getGoogleToken}=require('./google.oauth')
-console.log('main.js is loading...')
-require('dotenv').config()
+ console.log('main.js is loading...')
+ require('dotenv').config()
+const {getGoogleToken}= request('wflows')
+
+
 const { getSheetValues, setSheetValue } = require('./google.sheet.js')
 const fs = require('fs')
 const Apify = require('apify');
@@ -14,6 +16,7 @@ debugger;
 //var cloudinary = require('cloudinary');
 const { uploadToAtlas } = require('./atlas')
 const { setInputs } = require('./inputConfig')
+const { request } = require('http')
 // cloudinary.config({
 //     cloud_name: 'codergihub',
 //     api_key: '583195742238215',
@@ -27,7 +30,7 @@ console.log('refresh_token: process.env.google_refresh_token ', process.env.goog
 Apify.main(async () => {
     console.log('apify.main.js is loading...')
     debugger;
-   const google_access_token= await getGoogleToken()
+   const google_access_token=  await getGoogleToken()
    console.log('google_access_token 1',google_access_token)
    debugger;
     const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E' })
@@ -102,7 +105,7 @@ debugger;
         const totalScannedPages = pageUrlsData.items.length
         debugger;
         if (totalScannedPages === pageLength) {
-            const google_access_token= await getGoogleToken()
+            const google_access_token=  await getGoogleToken()
             console.log('google_access_token 2',google_access_token)
             console.log('total length match')
             debugger;

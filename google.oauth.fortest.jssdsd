@@ -1,0 +1,9 @@
+
+
+
+ function getGoogleToken() {
+    return process.env.google_access_token
+    //update firebase
+}
+
+module.exports = { getGoogleToken }
