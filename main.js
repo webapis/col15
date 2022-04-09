@@ -3,16 +3,16 @@
  * Use this to bootstrap your projects using the most up-to-date code.
  * If you're looking for examples or want to learn more, see README.
  */
- console.log('main.js is loading...')
- require('dotenv').config()
-const {getGoogleToken}= require('wflows')
+console.log('main.js is loading...')
+require('dotenv').config()
+const { getGoogleToken } = require('wflows')
 
 
 const { getSheetValues, setSheetValue } = require('./google.sheet.js')
 const fs = require('fs')
 const Apify = require('apify');
 
-debugger;
+
 //var cloudinary = require('cloudinary');
 const { uploadToAtlas } = require('./atlas')
 const { setInputs } = require('./inputConfig')
@@ -29,12 +29,12 @@ console.log('refresh_token: process.env.google_refresh_token ', process.env.goog
 
 Apify.main(async () => {
     console.log('apify.main.js is loading...')
-    debugger;
-   const google_access_token=  await getGoogleToken()
-   console.log('google_access_token 1',google_access_token)
-   debugger;
+
+    const google_access_token = await getGoogleToken()
+    console.log('google_access_token 1', google_access_token)
+
     const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E' })
-debugger;
+
     await setInputs()
     const { utils: { log } } = Apify;
 
@@ -48,68 +48,84 @@ debugger;
         if (i > 0) {
             log.info('value', value);
             const startUrl = value[0]
-             const marka = value[1]
+            const marka = value[1]
             requestQueue.addRequest({ url: startUrl, userData: { marka, start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`, startUrl } })
         }
     })
 
+    const sheetDataset = await Apify.openDataset(`categorySheet`);
+    const sheetData = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'categories!A:C' })
 
+
+
+    for (let value of sheetData.values.filter((c, i) => i > 0)) {
+        const subcategory = value[0]
+        const category = value[1]
+        const regex = value[2]
+        await sheetDataset.pushData({ subcategory, category, regex })
+
+    }
 
 
     const handlePageFunction = async (context) => {
+
+
+
         const { page, request: { userData: { start, marka, rangeG, rangeF, end, startUrl }, url } } = context
         const pageUrl = await page.url()
         const pageUrldataset = await Apify.openDataset(`${marka}`);
- 
+
         await pageUrldataset.pushData({ marka, pageUrl });
         const { handler, getUrls } = require(`./handlers/${marka}`);
         const { pageUrls, productCount, pageLength } = await getUrls(page)
 
         if (start) {
-            const google_access_token= await getGoogleToken()
-            console.log('google_access_token 2',google_access_token)
- 
-            debugger;
-        const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, value: productCount.toString() })
+            const google_access_token = await getGoogleToken()
+            console.log('google_access_token 2', google_access_token)
+
+
+            const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, value: productCount.toString() })
 
             let order = 1
             for (let url of pageUrls) {
-                debugger;
+
                 if (pageUrls.length === order) {
 
-                    requestQueue.addRequest({ url, userData: { marka,  start: false, end: true, rangeG, rangeF, startUrl } })
+                    requestQueue.addRequest({ url, userData: { marka, start: false, end: true, rangeG, rangeF, startUrl } })
                 } else {
 
-                    requestQueue.addRequest({ url, userData: { marka,  start: false, end: false, rangeG, rangeF, startUrl } })
+                    requestQueue.addRequest({ url, userData: { marka, start: false, end: false, rangeG, rangeF, startUrl } })
                 }
 
                 ++order;
             }
 
         }
+
+
         const data = await handler(page)
 
 
-  
+
 
 
         await dataset.pushData(data);
         const { items } = await dataset.getData()
-            debugger;
-            const total = items.filter((item) => item.marka === marka)
-            debugger;
-            const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeG, value: total.length.toString() })
-            debugger;
+
+        const total = items.filter((item) => item.marka === marka)
+
+        const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeG, value: total.length.toString() })
+
         const pageUrlsData = await pageUrldataset.getData()
 
         const totalScannedPages = pageUrlsData.items.length
-        debugger;
+
         if (totalScannedPages === pageLength) {
-            const google_access_token=  await getGoogleToken()
-            console.log('google_access_token 2',google_access_token)
+            const google_access_token = await getGoogleToken()
+            console.log('google_access_token 2', google_access_token)
             console.log('total length match')
-            debugger;
-    
+
+
         }
     }
     const crawler = new Apify.PuppeteerCrawler({
@@ -170,12 +186,38 @@ debugger;
     log.info('Starting the crawl.');
     await crawler.run();
     const ds = await dataset.getData()
+    const productItems = ds.items
+    const categoryData = await sheetDataset.getData()
+
+    const categoryItems = categoryData.items
+    const categorizedProductItems = productItems.map((p, i) => {
+        const procutTitle = p.title
 
 
+        const productCategory = categoryItems.find(c => procutTitle.toLowerCase().includes(c.subcategory))
+        if (productCategory) {
+            return { ...p, category: productCategory.category, subcategory: productCategory.subcategory }
+
+        } else {
+            return { ...p, category: "undefined", subcategory: "undefined" }
+        }
+
+    })
+    const sortedData =categorizedProductItems.sort((a, b) => (a.subcategory > b.subcategory) ? 1 : -1)
+    const orderedProducts = sortedData.map((c, i, arr) => {
+        const md = arr.map(el => el.subcategory)
+        const filteredData = arr.filter(obj => obj.subcategory === c.subcategory)
+        const index = filteredData.findIndex(obj => obj.title === c.title)
+
+        return { ...c, itemOrder: index }
+
+
+    })
+    debugger;
     console.log('items...', ds.items && ds.items.length);
     //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
     //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
-    await uploadToAtlas({ data: ds.items })
+    await uploadToAtlas({ data: orderedProducts })
     const errorDataSet = await Apify.openDataset(`error-data`);
     const { items: errorItems } = await errorDataSet.getData()
     if (errorItems && errorItems.length > 0) {

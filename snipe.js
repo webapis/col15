@@ -14,3 +14,5 @@ const mappedData =sortedData.map((c,i,arr)=>{
 
 })
 debugger;
+
+//Bisiklet Yaka Kısa Kollu Pamuklu Basic Tişört Ekru
