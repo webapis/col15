@@ -1,4 +1,5 @@
-const { fbRest } = require('../firebase-rest')
+require('dotenv').config()
+const { fbRest } =process.env.LOCAL==='true'? require('./firebase-rest'):require('../firebase-rest')
 const fetch = require('node-fetch')
 const fbDatabase = fbRest()
 async function getGoogleToken() {
@@ -13,8 +14,11 @@ async function getGoogleToken() {
     //refresh token
     console.log('process.env.google_refresh_token_2......',process.env.google_refresh_token)
     const fetchpath = `https://workflow-runner.netlify.app/.netlify/functions/google-refresh?refresh_token=${process.env.google_refresh_token}`
+    debugger;
     const authresponse = await fetch(fetchpath, { method: 'GET', headers: { 'User-Agent': 'node.js', 'Content-Type': 'application/json' } })
+    debugger;
     let authData = await authresponse.json()
+    debugger;
     console.log('authData!!!!!!!!!!!!!!!!!',authData)
     const update = { timestamp: { '.sv': "timestamp" }, ...authData }
     const path = `oauth/users/${process.env.localId}/workspaces/${selectedWorkspace}/auth/google`
