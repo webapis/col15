@@ -207,7 +207,7 @@ Apify.main(async () => {
     const orderedProducts = sortedData.map((c, i, arr) => {
         const md = arr.map(el => el.subcategory)
         const filteredData = arr.filter(obj => obj.subcategory === c.subcategory)
-        const index = filteredData.findIndex(obj => obj.title === c.title)
+        const index = filteredData.findIndex(obj => obj.imageUrl === c.imageUrl)
 
         return { ...c, itemOrder: index }
 
