@@ -78,7 +78,7 @@ Apify.main(async () => {
         await pageUrldataset.pushData({ marka, pageUrl });
         const { handler, getUrls } = require(`./handlers/${marka}`);
         const { pageUrls, productCount, pageLength } = await getUrls(page)
-
+debugger;
         if (start) {
             const google_access_token = await getGoogleToken()
             console.log('google_access_token 2', google_access_token)

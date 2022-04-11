@@ -14,6 +14,8 @@ async function handler(page) {
           const discPerc =priceOld ? Math.floor( ((parseInt(priceOld)-parseInt(priceNew))*100)/parseInt(priceOld)):null
           const hizliGonderi=productCard.querySelector('.product-badges').textContent.indexOf('hızlı gönderi') !==-1 ? true:false 
           const kargoBedava =productCard.querySelector('.product-badges').textContent.indexOf('kargo bedava') !==-1 ? true:false
+          const gender =productCard.getAttribute('data-dimension64')
+          debugger;
             return {
                 title,
                 priceOld,
@@ -26,7 +28,7 @@ async function handler(page) {
                 timestamp2:  new Date().toISOString(),
                 plcHolder:"https://statics.boyner.com.tr/assets/images/loading-icon.gif",
                 discPerc,
-                gender:productCard.querySelector('[data-dimension64]').getAttribute('data-dimension64'),
+                gender,
                 marka:'boyner'
 
             }
@@ -58,6 +60,6 @@ async function getUrls(page) {
             --pagesLeft
         }
     }
-    return pageUrls
+ return { pageUrls, productCount, pageLength: pageUrls.length + 1 }
 }
 module.exports = { handler, getUrls }
