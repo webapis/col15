@@ -206,13 +206,13 @@ Apify.main(async () => {
     const sortedData = categorizedProductItems.sort((a, b) => (a.subcategory > b.subcategory) ? 1 : -1)
     const orderedProducts = sortedData.map((c, i, arr) => {
         const md = arr.map(el => el.subcategory)
-        const filteredData = arr.filter(obj => obj.subcategory === c.subcategory)
+      //  const filteredData = arr.filter(obj => obj.subcategory === c.subcategory)
         let index;
-        if (filteredData.length > 1) {
-            index = filteredData.findIndex(obj => obj.imageUrl === c.imageUrl)
-        } else {
+    //    if (filteredData.length > 1) {
+      //      index = filteredData.findIndex(obj => obj.imageUrl === c.imageUrl)
+     //   } else {
             index = arr.findIndex(obj => obj.imageUrl === c.imageUrl)
-        }
+      //  }
 
 
         return { ...c, itemOrder: index }
