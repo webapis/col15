@@ -9,7 +9,7 @@
 		"mongodb": "^4.4.0",
 		"node-fetch": "^2.6.1",
 		"puppeteer": "*",
-		"wflows": "^1.2.8"
+		"wflows": "^1.2.9"
 	},
 	"devDependencies": {
 		"@apify/eslint-config": "^0.1.3",
