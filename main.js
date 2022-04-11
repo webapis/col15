@@ -196,7 +196,7 @@ Apify.main(async () => {
 
         const productCategory = categoryItems.find(c => procutTitle.toLowerCase().includes(c.subcategory))
         if (productCategory) {
-            return { ...p, category: productCategory.category, subcategory: productCategory.subcategory }
+            return { ...p, category: productCategory.category, subcategory: productCategory.regex }
 
         } else {
             return { ...p, category: "undefined", subcategory: "undefined" }
