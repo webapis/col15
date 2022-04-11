@@ -23,10 +23,12 @@ async function handler(page) {
                 imageUrl: imageUrl,
                 link: productCard.querySelector('.product-figure-wrap a').href,   
                 timestamp: Date.now(),
+                timestamp2:  new Date().toISOString(),
                 plcHolder:"https://statics.boyner.com.tr/assets/images/loading-icon.gif",
                 discPerc,
-                hizliGonderi,
-                kargoBedava
+                gender:productCard.querySelector('[data-dimension64]').getAttribute('data-dimension64'),
+                marka:'boyner'
+
             }
         }).filter(f => f.imageUrl !== null)
     })
