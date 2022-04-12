@@ -1,4 +1,4 @@
-const {extractPercentage}=require('./helper')
+
 async function handler(page) {
     debugger;//
     await page.waitForSelector('.prd-list .prd')
