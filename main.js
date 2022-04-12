@@ -69,7 +69,7 @@ Apify.main(async () => {
 
     const handlePageFunction = async (context) => {
 
-
+debugger;
 
         const { page, request: { userData: { start, marka, rangeG, rangeF, end, startUrl }, url } } = context
         const pageUrl = await page.url()
@@ -82,7 +82,6 @@ debugger;
         if (start) {
             const google_access_token = await getGoogleToken()
             console.log('google_access_token 2', google_access_token)
-
 
             const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, value: productCount.toString() })
 
@@ -103,7 +102,7 @@ debugger;
         }
 
 
-        const data = await handler(page)
+        const data = await handler(page,context)
 
 
 
