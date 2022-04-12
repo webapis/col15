@@ -14,7 +14,7 @@ async function handler(page) {
           const discPerc =priceOld ? Math.floor( ((parseInt(priceOld)-parseInt(priceNew))*100)/parseInt(priceOld)):null
           const hizliGonderi=productCard.querySelector('.product-badges').textContent.indexOf('hızlı gönderi') !==-1 ? true:false 
           const kargoBedava =productCard.querySelector('.product-badges').textContent.indexOf('kargo bedava') !==-1 ? true:false
-          const gender =productCard.getAttribute('data-dimension64')
+          const gender =productCard.getAttribute('data-dimension64').toLowerCase()
           debugger;
             return {
                 title,
