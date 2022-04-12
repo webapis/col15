@@ -35,10 +35,15 @@ return value.lastIndexOf(',') !==-1 ?value.lastIndexOf(','):value.length
                     imageUrl:item.querySelector('.prd-image-org img').getAttribute('data-original'),
                     link:item.querySelector('.prd-lnk').href,
                     timestamp: Date.now(),
+                    timestamp2: new Date().toISOString(),
                     plcHolder:'https://img1-ipekyol.mncdn.com/images/lazyload/placeHolder.gif',
                     discPerc,
-                    hizliGonderi:null,
-                    kargoBedava:null
+                    gender:'kadın',
+                    marka:'ipekyol',
+                 
+                 //   hizliGonderi:null,
+                //    kargoBedava:null,
+
                 }
         }).filter(f => f.imageUrl !== null)
     })
