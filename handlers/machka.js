@@ -1,7 +1,8 @@
-
+const Apify = require('apify');
 const { extractPercentage } = require('../helper')
-async function handler(page) {
-    debugger;
+async function handler(page,context) {
+    const { request: { userData: { start, marka, rangeG, rangeF,  startUrl } } } = context
+    const url = await page.url()
     await page.waitForSelector('.ems-prd-list-wrapper')
     //  await autoScroll(page)
     debugger;
@@ -29,20 +30,41 @@ async function handler(page) {
                 priceBasket: null,
                 basketDiscount: null,
                 imageUrl:item.querySelector('.ems-responsive-item').getAttribute('data-image-src'),
-                link: item.querySelector('.ems-prd-link btn-full').href,
+                link: item.querySelector('.ems-prd-link.btn-full').href,
                 timestamp: Date.now(),
+                timestamp2:  new Date().toISOString(),
                 plcHolder: 'https://storage.machka.com.tr/Machka/frontend/images/logo-emblem.svg',
                 discPerc,
-                hizliGonderi: null,
-                kargoBedava: null,
-                yeni:null,
+                // hizliGonderi: null,
+                // kargoBedava: null,
+                // yeni:null,
+                gender:'kadın',
+                marka:'machka'
   
             }
         }).filter(f => f.imageUrl !== null)
     })
     debugger;
     console.log('data length_____', data.length)
+    const nextPageExists = await page.$('.btn.btn-size01.load-next')
+    debugger;
+    if (nextPageExists && start) {
+       
+     
+        const nextPage = `${url}?page=2`
+        const requestQueue = await Apify.openRequestQueue();
+        debugger;
+        requestQueue.addRequest({ url: nextPage, userData: { marka, start: false, end: false, rangeG, rangeF, startUrl } })
+    } else if (nextPageExists && !start){
+        debugger;
+        const pageUrl = url.slice(0, url.lastIndexOf("=") + 1)
+        const pageNumber = parseInt(url.substr(url.indexOf("=") + 1)) + 1
+        const nextPage = pageUrl + pageNumber
+        const requestQueue = await Apify.openRequestQueue();
+        debugger;
+        requestQueue.addRequest({ url: nextPage, userData: { marka, start: false, end: false, rangeG, rangeF, startUrl } })
 
+    }
     return data
 }
 async function autoScroll(page) {
@@ -65,6 +87,6 @@ async function autoScroll(page) {
 }
 async function getUrls(page, param) {
 
-    return []
+    return { pageUrls: [], productCount: 0, pageLength: 0 }
 }
 module.exports = { handler, getUrls }
