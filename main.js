@@ -193,7 +193,7 @@ debugger;
         const procutTitle = p.title
 
 
-        const productCategory = categoryItems.find(c => procutTitle.toLowerCase().includes(c.subcategory))
+        const productCategory = categoryItems.find(c => procutTitle.toLowerCase().includes(c.subcategory.toLowerCase()))
         if (productCategory) {
             return { ...p, category: productCategory.category, subcategory: productCategory.regex }
 
