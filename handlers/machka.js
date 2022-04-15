@@ -52,7 +52,7 @@ async function handler(page,context) {
     if (nextPageExists && start) {
        
      debugger;
-        const nextPage = `${url}&page=2`
+        const nextPage = `${url}?page=2`
         const requestQueue = await Apify.openRequestQueue();
         
         requestQueue.addRequest({ url: nextPage, userData: {  start: false } })
