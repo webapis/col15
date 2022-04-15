@@ -1,11 +1,11 @@
 const Apify = require('apify');
 const { extractPercentage } = require('../helper')
 async function handler(page,context) {
-    const { request: { userData: { start, marka, rangeG, rangeF,  startUrl } } } = context
+    const { request: { userData: { start } } } = context
     const url = await page.url()
     await page.waitForSelector('.ems-prd-list-wrapper')
     //  await autoScroll(page)
-    debugger;
+    
     const data = await page.evaluate(() => {
         function extractPercentage(val1, val2) {
             const value1ll = parseInt(val1.substring(0, leftLastIndex(val1)).replace('.', ''))
@@ -44,25 +44,25 @@ async function handler(page,context) {
             }
         }).filter(f => f.imageUrl !== null)
     })
-    debugger;
+    
     console.log('data length_____', data.length)
     const nextPageExists = await page.$('.btn.btn-size01.load-next')
-    debugger;
+    
     if (nextPageExists && start) {
        
      
         const nextPage = `${url}?page=2`
         const requestQueue = await Apify.openRequestQueue();
-        debugger;
-        requestQueue.addRequest({ url: nextPage, userData: { marka, start: false, end: false, rangeG, rangeF, startUrl } })
+        
+        requestQueue.addRequest({ url: nextPage, userData: {  start: false } })
     } else if (nextPageExists && !start){
-        debugger;
+        
         const pageUrl = url.slice(0, url.lastIndexOf("=") + 1)
         const pageNumber = parseInt(url.substr(url.indexOf("=") + 1)) + 1
         const nextPage = pageUrl + pageNumber
         const requestQueue = await Apify.openRequestQueue();
-        debugger;
-        requestQueue.addRequest({ url: nextPage, userData: { marka, start: false, end: false, rangeG, rangeF, startUrl } })
+        
+        requestQueue.addRequest({ url: nextPage, userData: { start: false } })
 
     }
     return data

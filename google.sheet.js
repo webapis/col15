@@ -28,7 +28,20 @@ async function setSheetValue({ access_token, spreadsheetId, range, refresh_token
   let data = JSON.parse(sheetresponse)
   return data
 }
+async function appendSheetValues({ access_token, spreadsheetId, range, values }) {
+debugger;
+//https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}:append
+  const sheetresponse = await nodeFetch({
+    host: 'sheets.googleapis.com', path: `/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=USER_ENTERED`, method: 'post', body: JSON.stringify({
+      "values":values
+    }), headers: { 'User-Agent': 'node.js', 'Content-Type': 'application/json', 'Authorization': `Bearer ${access_token}` }
+  })
 
+debugger;
+
+  let data = JSON.parse(sheetresponse)
+  return data
+}
 
 // async function getGoogleToken({ refresh_token }) {
 //   const authresponse = await nodeFetch({ host: 'workflow-runner.netlify.app', path: `/.netlify/functions/google-refresh?refresh_token=${refresh_token}`, method: 'get', headers: { 'User-Agent': 'node.js', 'Content-Type': 'application/json' } })
@@ -36,7 +49,7 @@ async function setSheetValue({ access_token, spreadsheetId, range, refresh_token
 
 //   process.env.google_access_token = authData.access_token
 //   process.env.google_refresh_token = authData.refresh_token
-//   debugger;
+//   
 
 //   return authData
 // }
@@ -45,7 +58,7 @@ async function setSheetValue({ access_token, spreadsheetId, range, refresh_token
 //   global.getGoogleToken = getGoogleToken
 // }
 
-module.exports = { getSheetValues, setSheetValue }
+module.exports = { getSheetValues, setSheetValue,appendSheetValues }
 
 
 
@@ -67,7 +80,7 @@ async function getSheetValues({ access_token, spreadsheetId, range, refresh_toke
     return JSON.parse(sheetresponse)
 
   } else {
-    debugger;
+    
     console.log('sheet data', data)
     return data
 
@@ -90,11 +103,11 @@ async function setSheetValue({ access_token, spreadsheetId, range, refresh_token
   let data = JSON.parse(sheetresponse)
   const error = data['error']
   if (error) {
-    debugger;
+    
     //refresh token
     const authresponse = await nodeFetch({ host: 'workflow-runner.netlify.app', path: `/.netlify/functions/google-refresh?refresh_token=${refresh_token}`, method: 'get', headers: { 'User-Agent': 'node.js', 'Content-Type': 'application/json' } })
     let authData = JSON.parse(authresponse)
-    debugger;
+    
     const sheetresponse = await nodeFetch({ host: 'sheets.googleapis.com', path: `/v4/spreadsheets/${spreadsheetId}/values/${range}?valueInputOption=USER_ENTERED`, method: 'put', body:JSON.stringify({
       "values": [
         [
@@ -105,7 +118,7 @@ async function setSheetValue({ access_token, spreadsheetId, range, refresh_token
     return JSON.parse(sheetresponse)
 
   } else {
-    debugger;
+    
     console.log('sheet data', data)
     return data
 
