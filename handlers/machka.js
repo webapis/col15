@@ -4,8 +4,8 @@ async function handler(page,context) {
     const { request: { userData: { start } } } = context
     const url = await page.url()
     await page.waitForSelector('.ems-prd-list-wrapper')
-    //  await autoScroll(page)
-    
+
+ 
     const data = await page.evaluate(() => {
         function extractPercentage(val1, val2) {
             const value1ll = parseInt(val1.substring(0, leftLastIndex(val1)).replace('.', ''))
@@ -46,19 +46,21 @@ async function handler(page,context) {
     })
     
     console.log('data length_____', data.length)
+
     const nextPageExists = await page.$('.btn.btn-size01.load-next')
     
     if (nextPageExists && start) {
        
-     
-        const nextPage = `${url}?page=2`
+     debugger;
+        const nextPage = `${url}&page=2`
         const requestQueue = await Apify.openRequestQueue();
         
         requestQueue.addRequest({ url: nextPage, userData: {  start: false } })
     } else if (nextPageExists && !start){
-        
+        debugger;
         const pageUrl = url.slice(0, url.lastIndexOf("=") + 1)
-        const pageNumber = parseInt(url.substr(url.indexOf("=") + 1)) + 1
+        const pageNumber =parseInt( url.substr(url.lastIndexOf("=")+1))
+        debugger;
         const nextPage = pageUrl + pageNumber
         const requestQueue = await Apify.openRequestQueue();
         

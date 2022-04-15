@@ -28,6 +28,7 @@ console.log('process.env.google_access_token', process.env.google_access_token)
 console.log('refresh_token: process.env.google_refresh_token ', process.env.google_refresh_token)
 
 Apify.main(async () => {
+    const startDate =new Date().toString()
     console.log('apify.main.js is loading...')
 
     const google_access_token = await getGoogleToken()
@@ -65,10 +66,6 @@ Apify.main(async () => {
         process.env.productCount = productCount
 
         if (start) {
-            const google_access_token = await getGoogleToken()
-            console.log('google_access_token 2', google_access_token)
-
-            //  const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: process.env.rangeF, value: productCount.toString() })
             let order = 1
             for (let url of pageUrls) {
                 if (pageUrls.length === order) {
@@ -155,7 +152,7 @@ Apify.main(async () => {
     const productItems = ds.items
     const categoryData = await sheetDataset.getData()
     const google_access_token1 = await getGoogleToken()
-    const response = await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'TOTAL!A:B', values: [[`${process.env.startUrl}`, `${process.env.productCount}`, `${productItems.length}`,new Date().toString()]] })
+    const response = await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'TOTAL!A:B', values: [[`${process.env.startUrl}`,`${process.env.marka}`, `${process.env.productCount}`, `${productItems.length}`,startDate,new Date().toString()]] })
 
     const categoryItems = categoryData.items
     const categorizedProductItems = productItems.map((p, i) => {
@@ -168,6 +165,8 @@ Apify.main(async () => {
             return { ...p, category: "undefined", subcategory: "undefined" }
         }
     })
+
+    
     const sortedData = categorizedProductItems.sort((a, b) => (a.subcategory > b.subcategory) ? 1 : -1)
     const orderedProducts = sortedData.map((c, i, arr) => {
 
@@ -191,7 +190,7 @@ Apify.main(async () => {
         const category =curr[0].category
         const subcategory = curr[0].subcategory
         debugger;
-        colResulValues.push([`${process.env.marka}`,`${gender}`,`${category}`, `${subcategory}`, `${curr.length}`,new Date().toString()])
+        colResulValues.push([`${process.env.marka}`,`${gender}`,`${category}`, `${subcategory}`, `${curr.length}`,startDate,new Date().toString()])
         debugger;
     }
     debugger;
