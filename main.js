@@ -188,7 +188,7 @@ Apify.main(async () => {
     for (let cat in groupByCategory) {
         const curr = groupByCategory[cat]
         const gender = curr[0].gender
-        const category = cat
+        const category =curr[0].category
         const subcategory = curr[0].subcategory
         debugger;
         colResulValues.push([`${process.env.marka}`,`${gender}`,`${category}`, `${subcategory}`, `${curr.length}`,new Date().toString()])
