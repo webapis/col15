@@ -8,7 +8,7 @@ require('dotenv').config()
 const { getGoogleToken } = require('wflows')
 
 
-const { getSheetValues, setSheetValue } = require('./google.sheet.js')
+const { getSheetValues, setSheetValue, appendSheetValues } = require('./google.sheet.js')
 const fs = require('fs')
 const Apify = require('apify');
 
@@ -33,7 +33,7 @@ Apify.main(async () => {
     const google_access_token = await getGoogleToken()
     console.log('google_access_token 1', google_access_token)
 
-    const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'FEMALE!A:E' })
+    // const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: process.env.rangeU })
 
     await setInputs()
     const { utils: { log } } = Apify;
@@ -43,88 +43,55 @@ Apify.main(async () => {
 
     const dataset = await Apify.openDataset(`file-${Date.now()}`);
     const requestQueue = await Apify.openRequestQueue();
-    console.log('values', values)
-    values.forEach((value, i) => {
-        if (i > 0) {
-            log.info('value', value);
-            const startUrl = value[0]
-            const marka = value[1]
-            requestQueue.addRequest({ url: startUrl, userData: { marka, start: true, end: false, rangeG: `G${i + 1}`, rangeF: `F${i + 1}`, startUrl } })
-        }
-    })
-
+    requestQueue.addRequest({ url: process.env.startUrl, userData: { start: true } })
     const sheetDataset = await Apify.openDataset(`categorySheet`);
     const sheetData = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'categories!A:C' })
-
-
 
     for (let value of sheetData.values.filter((c, i) => i > 0)) {
         const subcategory = value[0]
         const category = value[1]
         const regex = value[2]
         await sheetDataset.pushData({ subcategory, category, regex })
-
     }
-
-
     const handlePageFunction = async (context) => {
 
-debugger;
-
-        const { page, request: { userData: { start, marka, rangeG, rangeF, end, startUrl }, url } } = context
+        const { page, request: { userData: { start } } } = context
         const pageUrl = await page.url()
-        const pageUrldataset = await Apify.openDataset(`${marka}`);
+        const pageUrldataset = await Apify.openDataset(`${process.env.marka}`);
 
-        await pageUrldataset.pushData({ marka, pageUrl });
-        const { handler, getUrls } = require(`./handlers/${marka}`);
+        await pageUrldataset.pushData({ marka: process.env.marka, pageUrl });
+        const { handler, getUrls } = require(`./handlers/${process.env.marka}`);
         const { pageUrls, productCount, pageLength } = await getUrls(page)
-debugger;
+        process.env.productCount = productCount
+
         if (start) {
             const google_access_token = await getGoogleToken()
             console.log('google_access_token 2', google_access_token)
 
-            const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeF, value: productCount.toString() })
-
+            //  const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: process.env.rangeF, value: productCount.toString() })
             let order = 1
             for (let url of pageUrls) {
-
                 if (pageUrls.length === order) {
-
-                    requestQueue.addRequest({ url, userData: { marka, start: false, end: true, rangeG, rangeF, startUrl } })
+                    requestQueue.addRequest({ url, userData: { start: false } })
                 } else {
-
-                    requestQueue.addRequest({ url, userData: { marka, start: false, end: false, rangeG, rangeF, startUrl } })
+                    requestQueue.addRequest({ url, userData: { start: false } })
                 }
-
                 ++order;
             }
-
         }
 
-
-        const data = await handler(page,context)
-
-
-
-
+        const data = await handler(page, context)
 
         await dataset.pushData(data);
         const { items } = await dataset.getData()
-
-        const total = items.filter((item) => item.marka === marka)
-
-        const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: rangeG, value: total.length.toString() })
-
+        const total = items.filter((item) => item.marka === process.env.marka)
+        //  const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: process.env.rangeG, value: total.length.toString() })
         const pageUrlsData = await pageUrldataset.getData()
-
         const totalScannedPages = pageUrlsData.items.length
-
         if (totalScannedPages === pageLength) {
             const google_access_token = await getGoogleToken()
             console.log('google_access_token 2', google_access_token)
             console.log('total length match')
-
-
         }
     }
     const crawler = new Apify.PuppeteerCrawler({
@@ -187,40 +154,54 @@ debugger;
     const ds = await dataset.getData()
     const productItems = ds.items
     const categoryData = await sheetDataset.getData()
+    const google_access_token1 = await getGoogleToken()
+    const response = await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'TOTAL!A:B', values: [[`${process.env.startUrl}`, `${process.env.productCount}`, `${productItems.length}`,new Date().toString()]] })
 
     const categoryItems = categoryData.items
     const categorizedProductItems = productItems.map((p, i) => {
         const procutTitle = p.title
 
-
         const productCategory = categoryItems.find(c => procutTitle.toLowerCase().includes(c.subcategory.toLowerCase()))
         if (productCategory) {
             return { ...p, category: productCategory.category, subcategory: productCategory.regex }
-
         } else {
             return { ...p, category: "undefined", subcategory: "undefined" }
         }
-
     })
     const sortedData = categorizedProductItems.sort((a, b) => (a.subcategory > b.subcategory) ? 1 : -1)
     const orderedProducts = sortedData.map((c, i, arr) => {
-     //   const md = arr.map(el => el.subcategory)
-      const filteredData = arr.filter(obj => obj.subcategory === c.subcategory)
+
+        const filteredData = arr.filter(obj => obj.subcategory === c.subcategory)
         let index;
-    //    if (filteredData.length > 1) {
-          index = filteredData.findIndex(obj => obj.imageUrl === c.imageUrl)
-     //   } else {
-          //  index = arr.findIndex(obj => obj.imageUrl === c.imageUrl)
-      //  }
-
-
+        index = filteredData.findIndex(obj => obj.imageUrl === c.imageUrl)
         return { ...c, itemOrder: index }
-
     })
+
+    const groupByCategory = sortedData.reduce((group, product) => {
+        const { subcategory } = product;
+        group[subcategory] = group[subcategory] ?? [];
+        group[subcategory].push(product);
+        return group;
+    }, {});
+
+    let colResulValues = []
+    for (let cat in groupByCategory) {
+        const curr = groupByCategory[cat]
+        const gender = curr[0].gender
+        const category = cat
+        const subcategory = curr[0].subcategory
+        debugger;
+        colResulValues.push([`${process.env.marka}`,`${gender}`,`${category}`, `${subcategory}`, `${curr.length}`,new Date().toString()])
+        debugger;
+    }
+    debugger;
+    await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DETAILS!A:B', values: colResulValues })
+
     debugger;
     console.log('items...', ds.items && ds.items.length);
     //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
     //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
+
     await uploadToAtlas({ data: orderedProducts })
     const errorDataSet = await Apify.openDataset(`error-data`);
     const { items: errorItems } = await errorDataSet.getData()
