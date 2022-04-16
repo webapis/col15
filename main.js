@@ -210,10 +210,8 @@ Apify.main(async () => {
 
         })
     }
-
     log.info('Crawl finished.');
     fs.rmSync(`${process.cwd()}/apify_storage`, { recursive: true, force: true });
-
 });
 
 

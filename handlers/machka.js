@@ -46,28 +46,31 @@ async function handler(page,context) {
     })
     
     console.log('data length_____', data.length)
-
-    const nextPageExists = await page.$('.btn.btn-size01.load-next')
+  
     
-    if (nextPageExists && start) {
-       
-     debugger;
-        const nextPage = `${url}?page=2`
-        const requestQueue = await Apify.openRequestQueue();
+        const nextPageExists = await page.$('.btn.btn-size01.load-next')
         
-        requestQueue.addRequest({ url: nextPage, userData: {  start: false } })
-    } else if (nextPageExists && !start){
-        debugger;
-        const pageUrl = url.slice(0, url.lastIndexOf("=") + 1)
-        const pageNumber =parseInt( url.substr(url.lastIndexOf("=")+1))
-        debugger;
-        const nextPage = pageUrl + pageNumber
-        const requestQueue = await Apify.openRequestQueue();
-        
-        requestQueue.addRequest({ url: nextPage, userData: { start: false } })
-
-    }
+        if (nextPageExists && start) {
+           
+         debugger;
+            const nextPage = `${url}&page=2`
+            const requestQueue = await Apify.openRequestQueue();
+            
+            requestQueue.addRequest({ url: nextPage, userData: {  start: false } })
+        } else if (nextPageExists && !start){
+            debugger;
+            const pageUrl = url.slice(0, url.lastIndexOf("=") + 1)
+            const pageNumber =parseInt( url.substr(url.lastIndexOf("=")+1))+1
+            debugger;
+            const nextPage = pageUrl + pageNumber
+            const requestQueue = await Apify.openRequestQueue();
+            
+            requestQueue.addRequest({ url: nextPage, userData: { start: false } })
+    
+        }
     return data
+    
+
 }
 async function autoScroll(page) {
     await page.evaluate(async () => {
