@@ -152,7 +152,8 @@ Apify.main(async () => {
     const productItems = ds.items
     const categoryData = await sheetDataset.getData()
     const google_access_token1 = await getGoogleToken()
-    const response = await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'TOTAL!A:B', values: [[`${process.env.startUrl}`,`${process.env.marka}`, `${process.env.productCount}`, `${productItems.length}`,startDate,new Date().toString()]] })
+    const currentDate =new Date.toString()
+    const response = await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'TOTAL!A:B', values: [[`${process.env.startUrl}`,`${process.env.marka}`, `${process.env.productCount}`, `${productItems.length}`,startDate,currentDate]] })
 
     const categoryItems = categoryData.items
     const categorizedProductItems = productItems.map((p, i) => {
@@ -190,7 +191,7 @@ Apify.main(async () => {
         const category =curr[0].category
         const subcategory = curr[0].subcategory
         debugger;
-        colResulValues.push([`${process.env.marka}`,`${gender}`,`${category}`, `${subcategory}`, `${curr.length}`,startDate,new Date().toString()])
+        colResulValues.push([`${process.env.marka}`,`${gender}`,`${category}`, `${subcategory}`, `${curr.length}`,startDate,currentDate])
         debugger;
     }
     debugger;
