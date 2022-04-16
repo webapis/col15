@@ -152,7 +152,7 @@ Apify.main(async () => {
     const productItems = ds.items
     const categoryData = await sheetDataset.getData()
     const google_access_token1 = await getGoogleToken()
-    const currentDate =new Date.toString()
+    const currentDate =new Date().toString()
     const response = await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'TOTAL!A:B', values: [[`${process.env.startUrl}`,`${process.env.marka}`, `${process.env.productCount}`, `${productItems.length}`,startDate,currentDate]] })
 
     const categoryItems = categoryData.items
