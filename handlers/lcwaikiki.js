@@ -33,7 +33,7 @@ async function handler(page) {
         }).filter(f => f.imageUrl !== null)
     })
 
-      console.log('data length_____', data.length)
+    console.log('data length_____', data.length, 'url:', url)
   
       return data
 }

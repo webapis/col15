@@ -1,6 +1,6 @@
 
 async function handler(page) {
-
+    const url = await page.url()
     await page.waitForSelector('.productGrid .product-item')
    
     const data = await page.evaluate(() => {
@@ -37,7 +37,7 @@ async function handler(page) {
     })
 
 
-    console.log('data_____', data.length)
+    console.log('data length_____', data.length, 'url:', url)
     return data
 }
 async function getUrls(page) {

@@ -1,5 +1,5 @@
 async function handler(page) {
-    
+    const url = await page.url()
     await page.waitForSelector('.productList .product-list-item')
 
     const data = await page.$$eval('.productList .product-list-item', (productCards) => {
@@ -35,7 +35,7 @@ async function handler(page) {
         }).filter(f => f.imageUrl !== null)
     })
 
-    console.log('data length_____', data.length)
+    console.log('data length_____', data.length, 'url:', url)
   
 
 
