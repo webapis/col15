@@ -1,5 +1,6 @@
 const Apify = require('apify');
 async function handler(page, context) {
+    
     const { request: { userData: { start } } } = context
     const url = await page.url()
 
@@ -71,6 +72,8 @@ async function handler(page, context) {
         requestQueue.addRequest({ url: nextPage, userData: {  start: false } })
 
     }
+
+    console.log('data length_____', data.length, 'url:', url)
     return data
 }
 
