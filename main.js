@@ -185,7 +185,7 @@ Apify.main(async () => {
     console.log('uploading to atlas complete...')
     //uploading to excell
     console.log('uploading to excell....')
-    const { items: groupByCategory } = await map2.reduce((group, product) => {
+    const  groupByCategory = await map2.reduce((group, product) => {
         const { subcategory } = product;
         group[subcategory] = group[subcategory] ?? [];
         group[subcategory].push(product);
@@ -202,7 +202,7 @@ Apify.main(async () => {
         colResulValues.push([`${process.env.marka}`, `${gender}`, `${category}`, `${subcategory}`, `${curr.length}`, startDate, currentDate])
 
     }
-
+debugger;
     await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DETAILS!A:B', values: colResulValues })
     console.log('uploading to excell complete....')
 
