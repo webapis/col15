@@ -52,16 +52,16 @@ async function handler(page,context) {
         
         if (nextPageExists && start) {
            
-         debugger;
+         
             const nextPage = `${url}&page=2`
             const requestQueue = await Apify.openRequestQueue();
             
             requestQueue.addRequest({ url: nextPage, userData: {  start: false } })
         } else if (nextPageExists && !start){
-            debugger;
+            
             const pageUrl = url.slice(0, url.lastIndexOf("=") + 1)
             const pageNumber =parseInt( url.substr(url.lastIndexOf("=")+1))+1
-            debugger;
+            
             const nextPage = pageUrl + pageNumber
             const requestQueue = await Apify.openRequestQueue();
             
