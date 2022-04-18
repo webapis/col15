@@ -5,7 +5,7 @@ const fs =require('fs')
 async function uploadToAtlas({data}){
   try {
     
- 
+ debugger;
   const uri = process.env.mongodb_url
   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   console.log('data.length...',data.length)
