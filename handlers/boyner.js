@@ -51,10 +51,11 @@ async function getUrls(page) {
     const totalPages = Math.ceil(productCount / 90)
     const pageUrls = []
     let pagesLeft = totalPages
+    debugger;
     for (let i = 2; i <= totalPages; i++) {
-        const url = `${firstUrl}/${i}${param}`
-    
-        console.log('i', i)
+        const url = `${firstUrl}&page=${i}`
+    debugger;
+      
         if (pagesLeft > 0) {
             pageUrls.push(url)
             --pagesLeft
