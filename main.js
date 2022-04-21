@@ -33,15 +33,14 @@ Apify.main(async () => {
 
     const google_access_token = await getGoogleToken()
 
-    console.log('google_access_token 1', google_access_token)
 
-    // const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: process.env.rangeU })
+
 
     await setInputs()
     const { utils: { log } } = Apify;
 
-    const input = await Apify.getInput();
-    console.log(input);
+ 
+
 
     const dataset = await Apify.openDataset(`file-${Date.now()}`);
     const requestQueue = await Apify.openRequestQueue();
@@ -87,8 +86,8 @@ Apify.main(async () => {
         const pageUrlsData = await pageUrldataset.getData()
         const totalScannedPages = pageUrlsData.items.length
         if (totalScannedPages === pageLength) {
-            const google_access_token = await getGoogleToken()
-            console.log('google_access_token 2', google_access_token)
+            
+   
             console.log('total length match')
         }
     }
@@ -155,7 +154,7 @@ Apify.main(async () => {
     const currentDate = new Date().toLocaleDateString()
     const rawProductDataset = await dataset.getData()
     const rawProductItems = rawProductDataset.items
-    const response = await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'TOTAL!A:B', values: [[`${process.env.startUrl}`, `${process.env.marka}`, `${process.env.productCount}`, `${rawProductItems.length}`, startDate, currentDate]] })
+  await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'TOTAL!A:B', values: [[`${process.env.startUrl}`, `${process.env.marka}`, `${process.env.productCount}`, `${rawProductItems.length}`, startDate, currentDate]] })
 
     const categoryItems = categoryData.items
     const map1 = await dataset.map((p, i) => {
@@ -206,7 +205,7 @@ debugger;
     await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DETAILS!A:B', values: colResulValues })
     console.log('uploading to excell complete....')
 
-    console.log('items...', map2 && map2.length);
+    console.log('items...', map2.length);
     //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
     //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
 
@@ -217,8 +216,9 @@ debugger;
 
     //     })
     // }
-    log.info('Crawl finished.');
+
     fs.rmSync(`${process.cwd()}/apify_storage`, { recursive: true, force: true });
+    log.info('Crawl finished.');
 });
 
 
