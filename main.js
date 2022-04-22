@@ -89,6 +89,7 @@ Apify.main(async () => {
         //     console.log('total length match')
         // }
     }
+
     const crawler = new Apify.PuppeteerCrawler({
         //requestList,
         requestQueue,
@@ -144,6 +145,7 @@ Apify.main(async () => {
         },
     });
 
+
     log.info('Starting the crawl.');
     await crawler.run();
 
@@ -165,7 +167,7 @@ Apify.main(async () => {
             return { ...p, category: "undefined", subcategory: "undefined" }
         }
     })
-
+console.log('map1.length',map1.length)
     const map2 = await map1.map((c, i, arr) => {
 
       
@@ -176,7 +178,7 @@ Apify.main(async () => {
         return { ...c, itemOrder: index }
     })
     console.log('uploading to atlas...')
-
+    console.log('map2.length',map2.length)
     debugger;
     await uploadToAtlas({ data: map2 })
     console.log('uploading to atlas complete...')

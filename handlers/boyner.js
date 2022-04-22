@@ -54,13 +54,16 @@ async function getUrls(page) {
     debugger;
     for (let i = 2; i <= totalPages; i++) {
         const url = `${firstUrl}/${i}${param}`
-    debugger;
+
       
         if (pagesLeft > 0) {
             pageUrls.push(url)
             --pagesLeft
         }
     }
+console.log('totalPages',totalPages)
+console.log('pageUrls',pageUrls.length)
+    debugger;
  return { pageUrls, productCount, pageLength: pageUrls.length + 1 }
 }
 module.exports = { handler, getUrls }
