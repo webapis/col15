@@ -35,7 +35,7 @@ async function appendSheetValues({ access_token, spreadsheetId, range, values })
     }), headers: { 'User-Agent': 'node.js', 'Content-Type': 'application/json', 'Authorization': `Bearer ${access_token}` }
   })
 
-debugger;
+
 
   let data = JSON.parse(sheetresponse)
   return data
