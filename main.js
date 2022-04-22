@@ -85,9 +85,7 @@ Apify.main(async () => {
         //  const response = await setSheetValue({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: process.env.rangeG, value: total.length.toString() })
         const pageUrlsData = await pageUrldataset.getData()
         const totalScannedPages = pageUrlsData.items.length
-        if (totalScannedPages === pageLength) {
-            
-   
+        if (totalScannedPages === pageLength) {      
             console.log('total length match')
         }
     }
