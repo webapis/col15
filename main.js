@@ -111,7 +111,7 @@ Apify.main(async () => {
         const dataUploaded = await uploadToAtlas({ data: map2 })
         const { result: {
             nModified, upserted } } = dataUploaded
-        console.log('upsertedData', dataUploaded)
+       // console.log('upsertedData', dataUploaded)
         console.log('result.upserted.length', dataUploaded.result.upserted.length)
         const totalUploaded = nModified + upserted.length
 
