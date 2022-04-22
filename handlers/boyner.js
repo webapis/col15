@@ -43,12 +43,12 @@ async function handler(page) {
 }
 
 async function getUrls(page) {
-    const param='/?dropListingPageSize=500&orderOption=Editor'
+    const param='/?dropListingPageSize=90&orderOption=Editor'
     await page.waitForSelector('.red-v1 .grey')
     const firstUrl =await page.url()
     
     const productCount = await page.$eval('.red-v1 .grey', element => parseInt(element.innerText.replace(/[^0-9]/g,'')))
-    const totalPages = Math.ceil(productCount / 500)
+    const totalPages = Math.ceil(productCount / 90)
     const pageUrls = []
     let pagesLeft = totalPages
     debugger;
