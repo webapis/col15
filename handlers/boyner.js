@@ -32,7 +32,7 @@ async function handler(page) {
                 marka:'boyner'
 
             }
-        }).filter(f => f.imageUrl !== null)
+        })//.filter(f => f.imageUrl !== null)
     })
 
     console.log('data length_____', data.length, 'url:', url)
