@@ -265,6 +265,9 @@ debugger;
 
     fs.rmSync(`${process.cwd()}/apify_storage`, { recursive: true, force: true });
     log.info('Crawl finished.');
+    setInterval(()=>{
+        console.log('wating....')
+    },1000)
 });
 
 
