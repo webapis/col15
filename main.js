@@ -47,7 +47,7 @@ Apify.main(async () => {
     requestQueue.addRequest({ url: process.env.startUrl, userData: { start: true } })
     const sheetDataset = await Apify.openDataset(`categorySheet`);
     const sheetData = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'categories!A:C' })
-
+    debugger;
     for (let value of sheetData.values.filter((c, i) => i > 0)) {
         const subcategory = value[0]
         const category = value[1]
@@ -57,7 +57,7 @@ Apify.main(async () => {
     const handlePageFunction = async (context) => {
 
         const { page, request: { userData: { start } } } = context
-        
+
         const pageUrl = await page.url()
         const pageUrldataset = await Apify.openDataset(`${process.env.marka}`);
 
@@ -80,7 +80,7 @@ Apify.main(async () => {
 
         const dataCollected = await handler(page, context)
         const categoryData = await sheetDataset.getData()
-          const google_access_token1 = await getGoogleToken()
+        const google_access_token1 = await getGoogleToken()
         const currentDate = new Date().toLocaleDateString()
 
         const categoryItems = categoryData.items
@@ -95,7 +95,7 @@ Apify.main(async () => {
             }
         })
         console.log('map1.length', map1.length)
-        const map2 = await map1.map((c, i, arr) => {
+        const map2 = map1.map((c, i, arr) => {
 
 
             const filteredData = arr.filter(obj => obj.subcategory === c.subcategory)
@@ -107,36 +107,47 @@ Apify.main(async () => {
         console.log('uploading to atlas...')
         console.log('map2.length', map2.length)
         debugger;
+        const table = map2.reduce((group, product) => {
+            const values =Object.values(product)
 
+     
+
+            group.push(values);
+            return group;
+        }, []);
+        debugger;
         const dataUploaded = await uploadToAtlas({ data: map2 })
         const { result: {
             nModified, upserted } } = dataUploaded
-       // console.log('upsertedData', dataUploaded)
+        // console.log('upsertedData', dataUploaded)
         console.log('result.upserted.length', dataUploaded.result.upserted.length)
         const totalUploaded = nModified + upserted.length
 
         debugger;
         console.log('uploading to atlas complete...')
         console.log('uploading to excell....')
-        const groupByCategory = await map2.reduce((group, product) => {
+
+        const groupByCategory = map2.reduce((group, product) => {
             const { subcategory } = product;
             group[subcategory] = group[subcategory] ?? [];
             group[subcategory].push(product);
             return group;
         }, {});
-    
+debugger;
         let colResulValues = []
         for (let cat in groupByCategory) {
             const curr = groupByCategory[cat]
             const gender = curr[0].gender
             const category = curr[0].category
             const subcategory = curr[0].subcategory
-    
+
             colResulValues.push([`${process.env.marka}`, `${gender}`, `${category}`, `${subcategory}`, `${curr.length}`, startDate, currentDate])
-    
+
         }
+        debugger;
+        await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DATA!A:B', values: table })
         await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DETAILS!A:B', values: colResulValues })
-        await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'UPSERTED!A:B', values: [[process.env.startUrl,pageUrl, process.env.marka, process.env.productCount, map1.length, totalUploaded, startDate, currentDate]] })
+        await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'UPSERTED!A:B', values: [[process.env.startUrl, pageUrl, process.env.marka, process.env.productCount, map1.length, totalUploaded, startDate, currentDate]] })
         console.log('uploading to excell complete....')
 
         console.log('items...', map2.length);
