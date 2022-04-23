@@ -117,11 +117,11 @@ Apify.main(async () => {
         }, []);
         debugger;
       //  const dataUploaded = await uploadToAtlas({ data: map2 })
-        const { result: {
-            nModified, upserted } } = dataUploaded
-        // console.log('upsertedData', dataUploaded)
-        console.log('result.upserted.length', dataUploaded.result.upserted.length)
-        const totalUploaded = nModified + upserted.length
+    //     const { result: {
+    //         nModified, upserted } } = dataUploaded
+    //     // console.log('upsertedData', dataUploaded)
+    //     console.log('result.upserted.length', dataUploaded.result.upserted.length)
+    //    // const totalUploaded = nModified + upserted.length
 
         debugger;
         console.log('uploading to atlas complete...')
