@@ -48,13 +48,13 @@ async function getUrls(page) {
     const firstUrl =await page.url()
     
     const productCount = await page.$eval('.red-v1 .grey', element => parseInt(element.innerText.replace(/[^0-9]/g,'')))
-    const totalPages = Math.ceil(productCount / 90)
+    const totalPages = Math.ceil(productCount / 45)
     const pageUrls = []
     let pagesLeft = totalPages
 
     for (let i = 2; i <= totalPages; i++) {
-        const url = `${firstUrl}/${i}${param}`
-
+        const url = `${firstUrl}&page=${i}`
+//&page=2
       
         if (pagesLeft >= 0) {
             pageUrls.push(url)
