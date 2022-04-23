@@ -116,7 +116,7 @@ Apify.main(async () => {
             return group;
         }, []);
         debugger;
-        const dataUploaded = await uploadToAtlas({ data: map2 })
+      //  const dataUploaded = await uploadToAtlas({ data: map2 })
         const { result: {
             nModified, upserted } } = dataUploaded
         // console.log('upsertedData', dataUploaded)
