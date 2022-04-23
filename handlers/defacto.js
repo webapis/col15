@@ -53,11 +53,11 @@ async function getUrls(page) {
     let pagesLeft = totalPages
     for (let i = 2; i <= totalPages; i++) {
 
-        if (pagesLeft > 0) {
+       // if (pagesLeft > 0) {
 
             pageUrls.push(`${url}?page=` + i)
             --pagesLeft
-        }
+       // }
      
     }
 
