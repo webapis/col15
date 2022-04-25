@@ -54,6 +54,9 @@ Apify.main(async () => {
         const regex = value[2]
         await sheetDataset.pushData({ subcategory, category, regex })
     }
+
+        
+process.env.dataLength=0
     const handlePageFunction = async (context) => {
 
         const { page, request: { userData: { start } } } = context
@@ -116,12 +119,12 @@ Apify.main(async () => {
             return group;
         }, []);
         debugger;
-        const { result:dataUploaded, client } = await uploadToAtlas({ data: map2 })
+    //    const { result:dataUploaded, client } = await uploadToAtlas({ data: map2 })
    //    const { result: {
         //    nModified, upserted } } = result
-        client.close()
+       // client.close()
         // console.log('upsertedData', dataUploaded)
-        console.log('result.upserted.length', dataUploaded.result.upserted.length)
+      //  console.log('result.upserted.length', dataUploaded.result.upserted.length)
         // const totalUploaded = nModified + upserted.length
 
         debugger;
@@ -150,8 +153,10 @@ Apify.main(async () => {
         // await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DETAILS!A:B', values: colResulValues })
         // await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'UPSERTED!A:B', values: [[process.env.startUrl, pageUrl, process.env.marka, process.env.productCount, map1.length, totalUploaded, startDate, currentDate]] })
         console.log('uploading to excell complete....')
-
+        
         console.log('items...', map2.length);
+        process.env.dataLength=process.env.dataLength+map2.length
+        console.log('process.env.dataLength',process.env.dataLength)
         //   await dataset.pushData(data);
         //  const { items } = await dataset.getData()
         // const total = items.filter((item) => item.marka === process.env.marka)
