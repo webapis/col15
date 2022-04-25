@@ -3,7 +3,7 @@ const fs = require('fs')
 
 
 async function uploadToAtlas({ data }) {
-  try {
+
 
     debugger;
     const uri = process.env.mongodb_url
@@ -30,13 +30,7 @@ async function uploadToAtlas({ data }) {
     const result = await collection.bulkWrite(bulkData)
     return { result, client: clnt }
 
-    //debugger;
-    clnt.close()
-  } catch (error) {
-    console.log('Mongo db Error', error)
-    return error;
 
-  }
 }
 
 module.exports = { uploadToAtlas }
