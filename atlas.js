@@ -27,10 +27,11 @@ async function uploadToAtlas({ data }) {
 
     const clnt = await client.connect()
     const collection = clnt.db("ecom").collection("collection2023");
-    return await collection.bulkWrite(bulkData)
+    const result = await collection.bulkWrite(bulkData)
+    return { result, client: clnt }
 
     //debugger;
-    // clnt.close()
+    clnt.close()
   } catch (error) {
     console.log('Mongo db Error', error)
     return error;

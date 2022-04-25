@@ -108,20 +108,21 @@ Apify.main(async () => {
         console.log('map2.length', map2.length)
         debugger;
         const table = map2.reduce((group, product) => {
-            const values =Object.values(product)
+            const values = Object.values(product)
 
-     
+
 
             group.push(values);
             return group;
         }, []);
         debugger;
-      //  const dataUploaded = await uploadToAtlas({ data: map2 })
-    //     const { result: {
-    //         nModified, upserted } } = dataUploaded
-    //     // console.log('upsertedData', dataUploaded)
-    //     console.log('result.upserted.length', dataUploaded.result.upserted.length)
-    //    // const totalUploaded = nModified + upserted.length
+        const { result:dataUploaded, client } = await uploadToAtlas({ data: map2 })
+   //    const { result: {
+        //    nModified, upserted } } = result
+        client.close()
+        // console.log('upsertedData', dataUploaded)
+        console.log('result.upserted.length', dataUploaded.result.upserted.length)
+        // const totalUploaded = nModified + upserted.length
 
         debugger;
         console.log('uploading to atlas complete...')
@@ -133,7 +134,7 @@ Apify.main(async () => {
             group[subcategory].push(product);
             return group;
         }, {});
-debugger;
+        debugger;
         let colResulValues = []
         for (let cat in groupByCategory) {
             const curr = groupByCategory[cat]
@@ -228,7 +229,7 @@ debugger;
 
 
     //uploading to excell
-    console.log('uploading to excell....')
+    //console.log('uploading to excell....')
     // const groupByCategory = await map2.reduce((group, product) => {
     //     const { subcategory } = product;
     //     group[subcategory] = group[subcategory] ?? [];
@@ -263,11 +264,9 @@ debugger;
     //     })
     // }
 
-    fs.rmSync(`${process.cwd()}/apify_storage`, { recursive: true, force: true });
-    log.info('Crawl finished.');
-    setInterval(()=>{
-        console.log('wating....')
-    },1000)
+    // fs.rmSync(`${process.cwd()}/apify_storage`, { recursive: true, force: true });
+    console.log('Crawl finished.');
+
 });
 
 
