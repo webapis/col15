@@ -45,8 +45,7 @@ async function handler(page, context) {
                 gender: 'kadın',
                 marka: 'ipekyol',
 
-                //   hizliGonderi:null,
-                //    kargoBedava:null,
+             
 
             }
         }).filter(f => f.imageUrl !== null)

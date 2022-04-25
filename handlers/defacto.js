@@ -30,8 +30,10 @@ async function handler(page) {
                 timestamp: Date.now(),
                 plcHolder: "https://dfcdn.defacto.com.tr/AssetsV2/dist/img/placeholders/placeholder.svg",
                 discPerc: discPerc ? discPerc : 0,
+                gender,
                 marka:'defacto',
-                gender
+             
+
             }
         }).filter(f => f.imageUrl !== null)
     })
