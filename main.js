@@ -47,6 +47,8 @@ Apify.main(async () => {
     requestQueue.addRequest({ url: process.env.startUrl, userData: { start: true } })
     const sheetDataset = await Apify.openDataset(`categorySheet`);
     const sheetData = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'categories!A:C' })
+   
+    console.log('sheetData',sheetData)
     debugger;
     for (let value of sheetData.values.filter((c, i) => i > 0)) {
         const subcategory = value[0]
