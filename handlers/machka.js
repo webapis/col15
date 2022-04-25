@@ -35,9 +35,7 @@ async function handler(page,context) {
                 timestamp2:  new Date().toISOString(),
                 plcHolder: 'https://storage.machka.com.tr/Machka/frontend/images/logo-emblem.svg',
                 discPerc,
-                // hizliGonderi: null,
-                // kargoBedava: null,
-                // yeni:null,
+     
                 gender:'kadın',
                 marka:'machka'
   
