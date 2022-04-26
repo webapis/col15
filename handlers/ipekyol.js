@@ -1,7 +1,7 @@
 const Apify = require('apify');
 async function handler(page, context) {
     
-    const { request: { userData: { start } } } = context
+    const {  userData: { start }  } = context
     const url = await page.url()
 
     debugger;//
