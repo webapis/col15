@@ -178,7 +178,7 @@
        
             await appendSheetValues({ access_token: google_access_token2, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'ERROR!A:B', values: [values] })
             debugger;
-            return Promise.reject(error)
+            return Promise.resolve(true)
         }
     }//
 
