@@ -5,11 +5,11 @@
  */
 
 
-debugger;
+
 (async () => {
-    
+
     console.log('main.js is loading...')
-    debugger;
+
     require('dotenv').config()
     const { getSheetValues, setSheetValue, appendSheetValues } = require('./google.sheet.js')
     const { getGoogleToken } = require('wflows')
@@ -17,18 +17,18 @@ debugger;
     var promiseLimit = require('promise-limit')
 
     const limit = promiseLimit(10);
-    process.env.dataLength=0
- 
+    process.env.dataLength = 0
+
     console.log('process.env.google_access_token', process.env.google_access_token)
     console.log('refresh_token: process.env.google_refresh_token ', process.env.google_refresh_token)
     const google_access_token = await getGoogleToken()
     const startDate = new Date().toLocaleDateString()
-    debugger;
+
     console.log('apify.main.js is loading...')
     const sheetData = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'categories!A:C' })
     console.log('sheetData', sheetData)
     const categorizedDataSheet = []
-    debugger;
+
     for (let value of sheetData.values.filter((c, i) => i > 0)) {
         const subcategory = value[0]
         const category = value[1]
@@ -48,7 +48,7 @@ debugger;
             '--disable-yuv420-biplanar'
         ]
     })
-    debugger;
+
     const { handler, getUrls } = require(`./handlers/${process.env.marka}`)
     const firstPage = await browser.newPage()
     await firstPage.setRequestInterception(true);
@@ -66,19 +66,19 @@ debugger;
             req.continue();
         }
     });
-    debugger;
+
     await firstPage.goto(process.env.startUrl)
     const { pageUrls, productCount, pageLength } = await getUrls(firstPage)
     process.env.productCount = productCount
 
 
-    debugger;
-    await Promise.all([limit(() => handlePage({ browser, handler, url: process.env.startUrl, categoryItems:categorizedDataSheet, context: { userData: { start: true } } })), pageUrls.map((url) => limit(() => handlePage({ browser, url, handler, categoryItems: categorizedDataSheet, context: { userData: { start: false } } })))])
+
+    await Promise.all([limit(() => handlePage({ browser, handler, url: process.env.startUrl, categoryItems: categorizedDataSheet, context: { userData: { start: true } } })), pageUrls.map((url) => limit(() => handlePage({ browser, url, handler, categoryItems: categorizedDataSheet, context: { userData: { start: false } } })))])
 
     async function handlePage({ browser, url, context, handler, categoryItems }) {
         try {
 
-            debugger;
+
             const newPage = await browser.newPage()
 
             await newPage.setRequestInterception(true);
@@ -98,7 +98,7 @@ debugger;
             });
 
             await newPage.goto(url)
-
+            debugger;
             const dataCollected = await handler(newPage, context)
 
 
@@ -108,7 +108,7 @@ debugger;
 
             const map1 = dataCollected.map((p, i) => {
                 const procutTitle = p.title
-                debugger;
+
                 const productCategory = categoryItems.find(c => procutTitle.toLowerCase().includes(c.subcategory.toLowerCase()))
 
                 if (productCategory) {
@@ -129,7 +129,7 @@ debugger;
             })
 
             console.log('map2.length', map2.length)
-            debugger;
+
             const table = map2.reduce((group, product) => {
                 const values = Object.values(product)
 
@@ -138,7 +138,7 @@ debugger;
                 group.push(values);
                 return group;
             }, []);
-            debugger;
+
 
 
             console.log('uploading to excell....')
@@ -149,7 +149,7 @@ debugger;
                 group[subcategory].push(product);
                 return group;
             }, {});
-            debugger;
+
             let colResulValues = []
             for (let cat in groupByCategory) {
                 const curr = groupByCategory[cat]
@@ -160,18 +160,23 @@ debugger;
                 colResulValues.push([`${process.env.marka}`, `${gender}`, `${category}`, `${subcategory}`, `${curr.length}`, startDate, currentDate])
 
             }
-            debugger;
+
             await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DATA!A:B', values: table })
             // await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DETAILS!A:B', values: colResulValues })
             // await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'UPSERTED!A:B', values: [[process.env.startUrl, pageUrl, process.env.marka, process.env.productCount, map1.length, totalUploaded, startDate, currentDate]] })
             console.log('uploading to excell complete....')
 
             console.log('items...', map2.length);
-            process.env.dataLength =parseInt( process.env.dataLength) + map2.length
+            process.env.dataLength = parseInt(process.env.dataLength) + map2.length
             console.log('process.env.dataLength', process.env.dataLength)
-            debugger;
+
             return Promise.resolve(true)
         } catch (error) {
+            const { name, message } = error
+            const values = [url,name,message]
+            const google_access_token2 = await getGoogleToken()
+       
+            await appendSheetValues({ access_token: google_access_token2, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'ERROR!A:B', values: [values] })
             debugger;
             return Promise.reject(error)
         }
