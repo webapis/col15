@@ -70,12 +70,13 @@
     await firstPage.goto(process.env.startUrl, { timeout: 60000 })
     const { pageUrls, productCount, pageLength } = await getUrls(firstPage)
     process.env.productCount = productCount
-    await firstPage.close()
+ 
 
 
     await Promise.all([limit(() => handlePage({ browser, handler, url: process.env.startUrl, categoryItems: categorizedDataSheet, context: { userData: { start: true } } })), pageUrls.map((url) => limit(() => handlePage({ browser, url, handler, categoryItems: categorizedDataSheet, context: { userData: { start: false } } })))])
+    await firstPage.close()
     await browser.close()
-    console.log('collection complete...')
+    console.log('COLLECTION complete...')
 
     async function handlePage({ browser, url, context, handler, categoryItems }) {
         try {
