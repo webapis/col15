@@ -16,7 +16,7 @@
     const puppeteer = require('puppeteer')
     var promiseLimit = require('promise-limit')
 
-    const limit = promiseLimit(10);
+    const limit = promiseLimit(5);
     process.env.dataLength = 0
 
     console.log('process.env.google_access_token', process.env.google_access_token)
@@ -75,6 +75,8 @@
 
     await Promise.all([limit(() => handlePage({ browser, handler, url: process.env.startUrl, categoryItems: categorizedDataSheet, context: { userData: { start: true } } })), pageUrls.map((url) => limit(() => handlePage({ browser, url, handler, categoryItems: categorizedDataSheet, context: { userData: { start: false } } })))])
 
+    console.log('collection complete...')
+    
     async function handlePage({ browser, url, context, handler, categoryItems }) {
         try {
 
