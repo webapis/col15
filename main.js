@@ -67,7 +67,7 @@
         }
     });
 
-    await firstPage.goto(process.env.startUrl)
+    await firstPage.goto(process.env.startUrl,{timeout:60000})
     const { pageUrls, productCount, pageLength } = await getUrls(firstPage)
     process.env.productCount = productCount
 
@@ -97,7 +97,7 @@
                 }
             });
 
-            await newPage.goto(url)
+            await newPage.goto(url,{timeout:60000})
             debugger;
             const dataCollected = await handler(newPage, context)
 
