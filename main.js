@@ -67,16 +67,16 @@
         }
     });
 
-    await firstPage.goto(process.env.startUrl,{timeout:60000})
+    await firstPage.goto(process.env.startUrl, { timeout: 60000 })
     const { pageUrls, productCount, pageLength } = await getUrls(firstPage)
     process.env.productCount = productCount
-
+    await firstPage.close()
 
 
     await Promise.all([limit(() => handlePage({ browser, handler, url: process.env.startUrl, categoryItems: categorizedDataSheet, context: { userData: { start: true } } })), pageUrls.map((url) => limit(() => handlePage({ browser, url, handler, categoryItems: categorizedDataSheet, context: { userData: { start: false } } })))])
-
+    await browser.close()
     console.log('collection complete...')
-    
+
     async function handlePage({ browser, url, context, handler, categoryItems }) {
         try {
 
@@ -99,10 +99,10 @@
                 }
             });
 
-            await newPage.goto(url,{timeout:60000})
+            await newPage.goto(url, { timeout: 60000 })
             debugger;
             const dataCollected = await handler(newPage, context)
-
+            await newPage.close()
 
             const google_access_token1 = await getGoogleToken()
             const currentDate = new Date().toLocaleDateString()
@@ -175,9 +175,9 @@
             return Promise.resolve(true)
         } catch (error) {
             const { name, message } = error
-            const values = [url,name,message]
+            const values = [url, name, message]
             const google_access_token2 = await getGoogleToken()
-       
+
             await appendSheetValues({ access_token: google_access_token2, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'ERROR!A:B', values: [values] })
             debugger;
             return Promise.resolve(true)
