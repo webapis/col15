@@ -16,8 +16,7 @@ const Apify = require('apify');
 const { uploadToAtlas } = require('./atlas')
 const { setInputs } = require('./inputConfig')
 
-console.log('process.env.google_access_token', process.env.google_access_token)
-console.log('refresh_token: process.env.google_refresh_token ', process.env.google_refresh_token)
+
 
 Apify.main(async () => {
     const startDate = new Date().toLocaleDateString()
@@ -25,7 +24,7 @@ Apify.main(async () => {
 
     const google_access_token = await getGoogleToken(process.env.GOOGLE_REFRESH_TOKEN)
 
-    console.log('google_access_token', google_access_token)
+
 
 
     await setInputs()
@@ -222,48 +221,6 @@ Apify.main(async () => {
     await crawler.run();
 
 
-    // const rawProductDataset = await dataset.getData()
-    //  const rawProductItems = rawProductDataset.items
-    //await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'TOTAL!A:B', values: [[`${process.env.startUrl}`, `${process.env.marka}`, `${process.env.productCount}`, `${rawProductItems.length}`, startDate, currentDate]] })
-
-
-    //uploading to excell
-    //console.log('uploading to excell....')
-    // const groupByCategory = await map2.reduce((group, product) => {
-    //     const { subcategory } = product;
-    //     group[subcategory] = group[subcategory] ?? [];
-    //     group[subcategory].push(product);
-    //     return group;
-    // }, {});
-
-    // let colResulValues = []
-    // for (let cat in groupByCategory) {
-    //     const curr = groupByCategory[cat]
-    //     const gender = curr[0].gender
-    //     const category = curr[0].category
-    //     const subcategory = curr[0].subcategory
-
-    //     colResulValues.push([`${process.env.marka}`, `${gender}`, `${category}`, `${subcategory}`, `${curr.length}`, startDate, currentDate])
-
-    // }
-    debugger;
-    // await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DETAILS!A:B', values: colResulValues })
-    // await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'UPSERTED!A:B', values: [[process.env.startUrl, process.env.marka, process.env.productCount, map1.length, totalUploaded, startDate, currentDate]] })
-    //   console.log('uploading to excell complete....')
-
-    // console.log('items...', map2.length);
-    //   fs.writeFileSync(`${JSONfileName}.json`, JSON.stringify(ds.items))
-    //const upload = await cloudinary.v2.uploader.upload(`${JSONfileName}.json`, { public_id: JSONfileName, resource_type: "auto", invalidate: true })
-
-    // const errorDataSet = await Apify.openDataset(`error-data`);
-    // const { items: errorItems } = await errorDataSet.getData()
-    // if (errorItems && errorItems.length > 0) {
-    //     errorItems.forEach(item => {
-
-    //     })
-    // }
-
-    // fs.rmSync(`${process.cwd()}/apify_storage`, { recursive: true, force: true });
     console.log('Crawl finished.');
 
 });

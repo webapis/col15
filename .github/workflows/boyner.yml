@@ -1,18 +1,10 @@
-name: aggregate
+name: boyner
 on:
   workflow_dispatch:
     inputs:
       projectName:
         description: 'Project Name'
-        required: true
-        default: 'books'
-      companyName:
-        description: 'Company Name'
-        required: true
-        default: 'sony'
-      parameters:
-       description: 'Parameters'
-       required: true
+        required: false
 env:
   CLOUD: true
 jobs:
