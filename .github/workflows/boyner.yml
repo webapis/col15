@@ -7,6 +7,11 @@ on:
         required: false
 env:
   CLOUD: true
+  GOOGLE_REFRESH_TOKEN: ${{secrets.GOOGLE_REFRESH_TOKEN}}
+  CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+  CLIENT_ID: ${{secrets.CLIENT_ID}}
+  male: https://www.boyner.com.tr/search?q=erkek
+  female: https://www.boyner.com.tr/search?q=kadın
 jobs:
   aggregator:
     runs-on: ubuntu-latest
@@ -21,8 +26,6 @@ jobs:
         uses: actions/cache@v2
         env:
          cache-name: cache-node-modules
-         male: https://www.boyner.com.tr/search?q=erkek
-         female: https://www.boyner.com.tr/search?q=kadın
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS...
           path: ~/.npm
