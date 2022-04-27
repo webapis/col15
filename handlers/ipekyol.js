@@ -1,7 +1,7 @@
 const Apify = require('apify');
 async function handler(page, context) {
-    
-    const {  userData: { start }  } = context
+
+    const { request: { userData: { start } } } = context
     const url = await page.url()
 
     debugger;//
@@ -45,21 +45,21 @@ async function handler(page, context) {
                 gender: 'kadın',
                 marka: 'ipekyol',
 
-                        /*
-                title,
-                priceOld: priceOld ? priceOld.replace(',', '.').trim() : 0,
-                priceNew: priceNew ? priceNew.replace(',', '.').trim() : 0,
-                priceBasket: priceBasket ? priceBasket.replace(',', '.').trim() : 0,
-                basketDiscount: basketDiscount ? basketDiscount : 0,
-                imageUrl: imageUrl && 'https:' + imageUrl.substring(imageUrl.lastIndexOf('//'), imageUrl.lastIndexOf('.jpg') + 4),
-                link: productCard.querySelector('.catalog-products .product-card .product-card__image .image-box a').href,
-                timestamp2: new Date().toISOString(),
-                timestamp: Date.now(),
-                plcHolder: "https://dfcdn.defacto.com.tr/AssetsV2/dist/img/placeholders/placeholder.svg",
-                discPerc: discPerc ? discPerc : 0,
-                gender,
-                marka:'defacto',
-                */
+                /*
+        title,
+        priceOld: priceOld ? priceOld.replace(',', '.').trim() : 0,
+        priceNew: priceNew ? priceNew.replace(',', '.').trim() : 0,
+        priceBasket: priceBasket ? priceBasket.replace(',', '.').trim() : 0,
+        basketDiscount: basketDiscount ? basketDiscount : 0,
+        imageUrl: imageUrl && 'https:' + imageUrl.substring(imageUrl.lastIndexOf('//'), imageUrl.lastIndexOf('.jpg') + 4),
+        link: productCard.querySelector('.catalog-products .product-card .product-card__image .image-box a').href,
+        timestamp2: new Date().toISOString(),
+        timestamp: Date.now(),
+        plcHolder: "https://dfcdn.defacto.com.tr/AssetsV2/dist/img/placeholders/placeholder.svg",
+        discPerc: discPerc ? discPerc : 0,
+        gender,
+        marka:'defacto',
+        */
 
             }
         }).filter(f => f.imageUrl !== null)
@@ -69,20 +69,20 @@ async function handler(page, context) {
     const nextPageExists = await page.$('.btnDefault.load-next')
     debugger;
     if (nextPageExists && start) {
-       
-     
+
+
         const nextPage = `${url}?page=2`
         const requestQueue = await Apify.openRequestQueue();
         debugger;
-        requestQueue.addRequest({ url: nextPage, userData: {  start: false } })
-    } else if (nextPageExists && !start){
+        requestQueue.addRequest({ url: nextPage, userData: { start: false } })
+    } else if (nextPageExists && !start) {
         debugger;
         const pageUrl = url.slice(0, url.lastIndexOf("=") + 1)
         const pageNumber = parseInt(url.substr(url.indexOf("=") + 1)) + 1
         const nextPage = pageUrl + pageNumber
         const requestQueue = await Apify.openRequestQueue();
         debugger;
-        requestQueue.addRequest({ url: nextPage, userData: {  start: false } })
+        requestQueue.addRequest({ url: nextPage, userData: { start: false } })
 
     }
 
