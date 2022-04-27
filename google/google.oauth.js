@@ -11,7 +11,7 @@ async function getGoogleToken() {
     const {
       access_token } = authData
 
-
+      console.log('authData',authData)
     return access_token
     //update firebase
 
