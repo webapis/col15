@@ -23,7 +23,7 @@ Apify.main(async () => {
     const startDate = new Date().toLocaleDateString()
     console.log('apify.main.js is loading...')
 
-    const google_access_token = await getGoogleToken()
+    const google_access_token = await getGoogleToken(process.env.GOOGLE_REFRESH_TOKEN)
 
     console.log('google_access_token', google_access_token)
 
@@ -77,7 +77,7 @@ Apify.main(async () => {
 
         const dataCollected = await handler(page, context)
         const categoryData = await sheetDataset.getData()
-        const google_access_token1 = await getGoogleToken()
+        const google_access_token1 = await getGoogleToken(process.env.GOOGLE_REFRESH_TOKEN)
         const currentDate = new Date().toLocaleDateString()
 
         const categoryItems = categoryData.items
