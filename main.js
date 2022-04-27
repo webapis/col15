@@ -25,7 +25,7 @@ Apify.main(async () => {
 
     const google_access_token = await getGoogleToken()
 
-
+    console.log('google_access_token', google_access_token)
 
 
     await setInputs()
@@ -39,8 +39,8 @@ Apify.main(async () => {
     requestQueue.addRequest({ url: process.env.startUrl, userData: { start: true } })
     const sheetDataset = await Apify.openDataset(`categorySheet`);
     const sheetData = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'categories!A:C' })
-   
-    console.log('sheetData',sheetData)
+
+    console.log('sheetData', sheetData)
     debugger;
     for (let value of sheetData.values.filter((c, i) => i > 0)) {
         const subcategory = value[0]
@@ -49,8 +49,8 @@ Apify.main(async () => {
         await sheetDataset.pushData({ subcategory, category, regex })
     }
 
-        
-process.env.dataLength=0
+
+    process.env.dataLength = 0
     const handlePageFunction = async (context) => {
 
         const { page, request: { userData: { start } } } = context
@@ -113,12 +113,12 @@ process.env.dataLength=0
             return group;
         }, []);
         debugger;
-    //    const { result:dataUploaded, client } = await uploadToAtlas({ data: map2 })
-   //    const { result: {
+        //    const { result:dataUploaded, client } = await uploadToAtlas({ data: map2 })
+        //    const { result: {
         //    nModified, upserted } } = result
-       // client.close()
+        // client.close()
         // console.log('upsertedData', dataUploaded)
-      //  console.log('result.upserted.length', dataUploaded.result.upserted.length)
+        //  console.log('result.upserted.length', dataUploaded.result.upserted.length)
         // const totalUploaded = nModified + upserted.length
 
         debugger;
@@ -147,10 +147,10 @@ process.env.dataLength=0
         // await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DETAILS!A:B', values: colResulValues })
         // await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'UPSERTED!A:B', values: [[process.env.startUrl, pageUrl, process.env.marka, process.env.productCount, map1.length, totalUploaded, startDate, currentDate]] })
         console.log('uploading to excell complete....')
-        
+
         console.log('items...', map2.length);
-        process.env.dataLength=parseInt( process.env.dataLength)+map2.length
-        console.log('process.env.dataLength',process.env.dataLength)
+        process.env.dataLength = parseInt(process.env.dataLength) + map2.length
+        console.log('process.env.dataLength', process.env.dataLength)
         //   await dataset.pushData(data);
         //  const { items } = await dataset.getData()
         // const total = items.filter((item) => item.marka === process.env.marka)
