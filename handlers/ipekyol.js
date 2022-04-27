@@ -38,14 +38,28 @@ async function handler(page, context) {
                 basketDiscount: null,
                 imageUrl: item.querySelector('[data-image-src]') && item.querySelector('[data-image-src]').getAttribute('data-image-src'),
                 link: item.querySelector('.prd-lnk').href,
-                timestamp: Date.now(),
                 timestamp2: new Date().toISOString(),
+                timestamp: Date.now(),
                 plcHolder: 'https://img1-ipekyol.mncdn.com/images/lazyload/placeHolder.gif',
                 discPerc,
                 gender: 'kadın',
                 marka: 'ipekyol',
 
-             
+                        /*
+                title,
+                priceOld: priceOld ? priceOld.replace(',', '.').trim() : 0,
+                priceNew: priceNew ? priceNew.replace(',', '.').trim() : 0,
+                priceBasket: priceBasket ? priceBasket.replace(',', '.').trim() : 0,
+                basketDiscount: basketDiscount ? basketDiscount : 0,
+                imageUrl: imageUrl && 'https:' + imageUrl.substring(imageUrl.lastIndexOf('//'), imageUrl.lastIndexOf('.jpg') + 4),
+                link: productCard.querySelector('.catalog-products .product-card .product-card__image .image-box a').href,
+                timestamp2: new Date().toISOString(),
+                timestamp: Date.now(),
+                plcHolder: "https://dfcdn.defacto.com.tr/AssetsV2/dist/img/placeholders/placeholder.svg",
+                discPerc: discPerc ? discPerc : 0,
+                gender,
+                marka:'defacto',
+                */
 
             }
         }).filter(f => f.imageUrl !== null)

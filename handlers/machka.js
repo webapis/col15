@@ -37,6 +37,9 @@ async function handler(page,context) {
                 discPerc,
                 gender:'kadın',
                 marka:'machka'
+
+                
+             
   
             }
         }).filter(f => f.imageUrl !== null)

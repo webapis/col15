@@ -11,8 +11,8 @@ async function handler(page) {
             const firstPrice = productCard.querySelector('.firstPrice') ? productCard.querySelector('.firstPrice').innerText.trim().replace('₺', '').replace('TL', '') : null
             const insteadPrice = productCard.querySelector('.insteadPrice') ? productCard.querySelector('.insteadPrice').innerText.trim().replace('₺', '').replace('TL', '') : null
             const newPrice = productCard.querySelector('.newPrice') ? productCard.querySelector('.newPrice').innerText.trim().replace('₺', '').replace('TL', '') : null
-            const discount = productCard.querySelector('.product-badge') ? productCard.querySelector('.product-badge').innerText.trim() : null
-            const discount1Badge = productCard.querySelector('.vl-2ye-50indirim-badge img') ? true : false
+          //  const discount = productCard.querySelector('.product-badge') ? productCard.querySelector('.product-badge').innerText.trim() : null
+          //  const discount1Badge = productCard.querySelector('.vl-2ye-50indirim-badge img') ? true : false
             const priceNew = firstPrice || newPrice
             const discPerc = insteadPrice ? Math.floor(((parseInt(insteadPrice) - parseInt(priceNew)) * 100) / parseInt(insteadPrice)) : null
             const gender =window.location.href.substring(window.location.href.indexOf('.com/tr/')+8,window. location. href.indexOf('/c/')).replace('i','ı')
@@ -20,9 +20,8 @@ async function handler(page) {
                 title: productCard.querySelector('.prc-name').innerText,
                 priceOld: insteadPrice,
                 priceNew,
-                discount,
-                discount1Badge,
                 priceBasket: '',
+                basketDiscount:'',
                 imageUrl: imageUrl,
                 link: productCard.querySelector('.prc-name').href,
                 timestamp2:  new Date().toISOString(),
@@ -31,6 +30,8 @@ async function handler(page) {
                 discPerc,
                 gender,
                 marka:'koton'
+
+            
             }
         })//.filter(f => f.imageUrl !== null)
 
