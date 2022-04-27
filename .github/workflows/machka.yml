@@ -1,0 +1,44 @@
+name: machka
+on:
+  workflow_dispatch:
+    inputs:
+      projectName:
+        description: 'Project Name'
+        required: false
+env:
+  CLOUD: true
+  GOOGLE_REFRESH_TOKEN: ${{secrets.GOOGLE_REFRESH_TOKEN}}
+  CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+  CLIENT_ID: ${{secrets.CLIENT_ID}}
+  female: https://www.machka.com.tr/search?q=E%C5%9Farp%20%C5%9Eort%20Elbise%20Kemer%20Bluz%20G%C3%B6mlek%20Bro%C5%9F%20Tunik%20Ceket%20Kap%20Etek%20Pantolon%20Triko%20Sweatshirt%20Penye%20Yelek%20Pard%C3%B6s%C3%BC%20Kaban%20Mont
+  marka: machka
+jobs:
+  aggregator:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+         cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS...
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        run: 'npm install'
+      - name: aggregation step
+        id: collection
+        run: node main.js
+
+
+
