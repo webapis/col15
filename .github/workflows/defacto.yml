@@ -1,4 +1,4 @@
-name: boyner
+name: defacto
 on:
   workflow_dispatch:
     inputs:
@@ -21,8 +21,8 @@ jobs:
         uses: actions/cache@v2
         env:
          cache-name: cache-node-modules
-         male: https://www.boyner.com.tr/search?q=erkek
-         female: https://www.boyner.com.tr/search?q=kadın
+         male: https://www.defacto.com.tr/tum-urunler-erkek
+         female: https://www.defacto.com.tr/kadin-tumu
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS...
           path: ~/.npm

@@ -35,7 +35,15 @@ Apify.main(async () => {
 
     //const dataset = await Apify.openDataset(`file-${Date.now()}`);
     const requestQueue = await Apify.openRequestQueue();
-    requestQueue.addRequest({ url: process.env.startUrl, userData: { start: true } })
+    
+    if (process.env.male) {
+        requestQueue.addRequest({ url: process.env.male, userData: { start: true } })
+    }
+
+    if (process.env.female) {
+        requestQueue.addRequest({ url: process.env.female, userData: { start: true } })
+    }
+
     const sheetDataset = await Apify.openDataset(`categorySheet`);
     const sheetData = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'categories!A:C' })
 
