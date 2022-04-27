@@ -1,4 +1,4 @@
-name: defacto
+name: koton
 on:
   workflow_dispatch:
     inputs:
