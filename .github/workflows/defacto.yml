@@ -12,6 +12,7 @@ env:
   CLIENT_ID: ${{secrets.CLIENT_ID}}
   male: https://www.defacto.com.tr/tum-urunler-erkek
   female: https://www.defacto.com.tr/kadin-tumu
+  marka: defacto
 jobs:
   aggregator:
     runs-on: ubuntu-latest

@@ -12,6 +12,7 @@ env:
   CLIENT_ID: ${{secrets.CLIENT_ID}}
   male: https://www.boyner.com.tr/search?q=erkek
   female: https://www.boyner.com.tr/search?q=kadın
+  marka: boyner
 jobs:
   aggregator:
     runs-on: ubuntu-latest
