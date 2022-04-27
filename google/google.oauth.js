@@ -7,6 +7,7 @@ async function getGoogleToken() {
     const issuetime = parseInt(process.env.expires_in) * 1000 + parseInt(process.env.lasttimestamp)
     const currenttimestamp = Date.now()
     if (issuetime < currenttimestamp) {
+      console.log('old access token.......')
       return process.env.access_token
     } else {
       const authresponse = await refreshToken(process.env.GOOGLE_REFRESH_TOKEN)
@@ -17,7 +18,7 @@ async function getGoogleToken() {
       process.env.expires_in = expires_in
       process.env.access_token = access_token
       process.env.lasttimestamp = Date.now()
-
+      console.log('refreshed access token.......')
       return access_token
 
     }
@@ -33,7 +34,7 @@ async function getGoogleToken() {
     process.env.expires_in = expires_in
     process.env.access_token = access_token
     process.env.lasttimestamp = Date.now()
-
+    console.log('first time refreshed access token.......')
     return access_token
   }
 
