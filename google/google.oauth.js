@@ -6,9 +6,9 @@ async function getGoogleToken() {
   if (process.env.access_token) {
     const issuetime = parseInt(process.env.expires_in) * 1000 + parseInt(process.env.lasttimestamp)
     const currenttimestamp = Date.now()
-    console.log('currenttimestamp..................',currenttimestamp)
+    console.log('currenttimestamp.........',currenttimestamp)
     console.log('issuetime....................',issuetime)
-    if (issuetime < currenttimestamp) {
+    if (issuetime > currenttimestamp) {
       console.log('old access token.......')
       return process.env.access_token
     } else {
