@@ -27,7 +27,6 @@ async function handler(page) {
                     discPerc:discPerc===0?null:discPerc,
                     gender:window. document.querySelector('p > span:nth-child(1)').innerHTML.replaceAll('"',''),
                     marka:'lcwaikiki'
-             
 
                 }
         }).filter(f => f.imageUrl !== null)

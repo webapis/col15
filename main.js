@@ -35,20 +35,20 @@ Apify.main(async () => {
 
     //const dataset = await Apify.openDataset(`file-${Date.now()}`);
     const requestQueue = await Apify.openRequestQueue();
-    
+
     if (process.env.male) {
-        requestQueue.addRequest({ url: process.env.male, userData: { start: true } })
+        requestQueue.addRequest({ url: process.env.male, userData: { start: true, gender: 'MALE' } })
     }
 
     if (process.env.female) {
-        requestQueue.addRequest({ url: process.env.female, userData: { start: true } })
+        requestQueue.addRequest({ url: process.env.female, userData: { start: true, gender: 'FEMALE' } })
     }
 
     const sheetDataset = await Apify.openDataset(`categorySheet`);
     const sheetData = await getSheetValues({ access_token: google_access_token, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'categories!A:C' })
 
     console.log('sheetData', sheetData)
-    debugger;
+
     for (let value of sheetData.values.filter((c, i) => i > 0)) {
         const subcategory = value[0]
         const category = value[1]
@@ -60,7 +60,7 @@ Apify.main(async () => {
     process.env.dataLength = 0
     const handlePageFunction = async (context) => {
 
-        const { page, request: { userData: { start } } } = context
+        const { page, request: { userData: { start, gender } } } = context
 
         const pageUrl = await page.url()
         const pageUrldataset = await Apify.openDataset(`${process.env.marka}`);
@@ -74,9 +74,9 @@ Apify.main(async () => {
             let order = 1
             for (let url of pageUrls) {
                 if (pageUrls.length === order) {
-                    requestQueue.addRequest({ url, userData: { start: false } })
+                    requestQueue.addRequest({ url, userData: { start: false, gender } })
                 } else {
-                    requestQueue.addRequest({ url, userData: { start: false } })
+                    requestQueue.addRequest({ url, userData: { start: false, gender } })
                 }
                 ++order;
             }
@@ -150,7 +150,18 @@ Apify.main(async () => {
 
         }
         debugger;
-        await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DATA!A:B', values: table })
+        if (gender === 'MALE') {
+            debugger;
+          const response= await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1IeaYAURMnrbZAsQA_NO_LA_y_qq8MmwxjSo854vz5YM', range: 'DATA!A:B', values: table })
+       debugger;
+        }
+        if (gender === 'FEMALE') {
+            debugger;
+            const response= await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '12mKtqxu5A-CVoXP_Kw36JxKiC69oPUUXVQmm7LUfh3s', range: 'DATA!A:B', values: table })
+            debugger;
+        }
+        debugger;
+
         // await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'DETAILS!A:B', values: colResulValues })
         // await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1TVFTCbMIlLXFxeXICx2VuK0XtlNLpmiJxn6fJfRclRw', range: 'UPSERTED!A:B', values: [[process.env.startUrl, pageUrl, process.env.marka, process.env.productCount, map1.length, totalUploaded, startDate, currentDate]] })
         console.log('uploading to excell complete....')
