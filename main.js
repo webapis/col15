@@ -224,14 +224,21 @@ Apify.main(async () => {
                 });
             },
         ],
-        handleFailedRequestFunction: async ({ request }) => {
+        handleFailedRequestFunction: async ({ request:{errorMessages,url,userData:{gender,start}} }) => {
+            const google_access_token1 = await getGoogleToken(process.env.GOOGLE_REFRESH_TOKEN)
+            if (gender === 'MALE') {
+                debugger;
+              const response= await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '1IeaYAURMnrbZAsQA_NO_LA_y_qq8MmwxjSo854vz5YM', range: 'ERROR!A:B', values: [[url,errorMessages[0].substring(0,150),gender,start]] })
+           debugger;
+            }
+            if (gender === 'FEMALE') {
+                debugger;
+                const response= await appendSheetValues({ access_token: google_access_token1, spreadsheetId: '12mKtqxu5A-CVoXP_Kw36JxKiC69oPUUXVQmm7LUfh3s', range: 'ERROR!A:B', values:  [[url,errorMessages[0].substring(0,150),gender,start]] })
+                debugger;
+            }
             // This function is called when the crawling of a request failed too many times
-            const errorDataSet = await Apify.openDataset(`error-data`);
-            await errorDataSet.pushData({
-                url: request.url,
-                succeeded: false,
-                errors: request.errorMessages,
-            });
+            debugger;
+    
         },
     });
 
