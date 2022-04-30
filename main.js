@@ -117,7 +117,10 @@ Apify.main(async () => {
             return group;
         }, []);
         debugger;
-          await uploadToAtlas({ data: map2 })
+        if(map2.length>0){
+            await uploadToAtlas({ data: map2 })
+        }
+         
         //    const { result: {
         //    nModified, upserted } } = result
         // client.close()
