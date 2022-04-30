@@ -9,7 +9,7 @@ env:
   CLOUD: true
   GOOGLE_REFRESH_TOKEN: ${{secrets.GOOGLE_REFRESH_TOKEN}}
   CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
-  CLIENT_ID: ${{secrets.CLIENT_ID}
+  CLIENT_ID: ${{secrets.CLIENT_ID}}
   MONGODB_URL: ${{secrets.MONGODB_URL}}
   male: https://www.boyner.com.tr/search?q=erkek
   female: https://www.boyner.com.tr/search?q=kadın
