@@ -10,7 +10,7 @@ env:
   GOOGLE_REFRESH_TOKEN: ${{secrets.GOOGLE_REFRESH_TOKEN}}
   CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
   CLIENT_ID: ${{secrets.CLIENT_ID}}
-  MONGODB_URL: ${{secrets.MONGODB_URL}
+  MONGODB_URL: ${{secrets.MONGODB_URL}}
   male: https://www.koton.com/tr/erkek/c/M01-C01?text=erkek
   female: https://www.koton.com/tr/kadin/c/M01-C02?text=kad%C4%B1n
   marka: koton
