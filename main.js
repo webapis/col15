@@ -24,9 +24,6 @@ Apify.main(async () => {
 
     const google_access_token = await getGoogleToken(process.env.GOOGLE_REFRESH_TOKEN)
 
-
-
-
     await setInputs()
     const { utils: { log } } = Apify;
 
@@ -120,7 +117,7 @@ Apify.main(async () => {
             return group;
         }, []);
         debugger;
-        //    const { result:dataUploaded, client } = await uploadToAtlas({ data: map2 })
+          await uploadToAtlas({ data: map2 })
         //    const { result: {
         //    nModified, upserted } } = result
         // client.close()

@@ -6,7 +6,7 @@ async function uploadToAtlas({ data }) {
 
 
     debugger;
-    const uri = process.env.mongodb_url
+    const uri = process.env.MONGODB_URL
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     console.log('data.length...', data.length)
     const bulkData = data.map(d => {
