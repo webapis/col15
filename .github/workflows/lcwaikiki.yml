@@ -10,6 +10,7 @@ env:
   GOOGLE_REFRESH_TOKEN: ${{secrets.GOOGLE_REFRESH_TOKEN}}
   CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
   CLIENT_ID: ${{secrets.CLIENT_ID}}
+  MONGODB_URL: ${{secrets.MONGODB_URL}
   male: https://www.lcwaikiki.com/tr-TR/TR/arama?q=erkek
   female: https://www.lcwaikiki.com/tr-TR/TR/arama?q=kad%C4%B1n
   marka: lcwaikiki

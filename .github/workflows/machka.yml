@@ -10,6 +10,7 @@ env:
   GOOGLE_REFRESH_TOKEN: ${{secrets.GOOGLE_REFRESH_TOKEN}}
   CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
   CLIENT_ID: ${{secrets.CLIENT_ID}}
+  MONGODB_URL: ${{secrets.MONGODB_URL}
   female: https://www.machka.com.tr/search?q=E%C5%9Farp%20%C5%9Eort%20Elbise%20Kemer%20Bluz%20G%C3%B6mlek%20Bro%C5%9F%20Tunik%20Ceket%20Kap%20Etek%20Pantolon%20Triko%20Sweatshirt%20Penye%20Yelek%20Pard%C3%B6s%C3%BC%20Kaban%20Mont
   marka: machka
 jobs:
