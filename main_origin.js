@@ -207,6 +207,7 @@
          preNavigationHooks: [
              async (crawlingContext, gotoOptions) => {
                  const { page } = crawlingContext;
+                 await page.setDefaultNavigationTimeout(0); 
                  await page.setRequestInterception(true);
                  page.on('request', req => {
                      const resourceType = req.resourceType();
