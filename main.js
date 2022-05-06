@@ -58,13 +58,13 @@ debugger;
 
         if(pageType==='dealer info'){
             //Website, City, State, Phone
-            await page.waitForSelector('.dealer-website a')
-            await page.waitForSelector('.city-state-zip')
-            await page.waitForSelector('.phone-number')
+            await page.waitForSelector('#dealerWebsite')
+            await page.waitForSelector('#dealercity')
+            await page.waitForSelector('#dealerphone')
             const dealerInfo = await page.evaluate(()=>{
-                    const website =document.querySelector('.dealer-website a').href
-                    const city =document.querySelector('.city-state-zip').textContent
-                    const phone =document.querySelector('.phone-number').textContent
+                    const website =document.querySelector('#dealerWebsite').href
+                    const city =document.querySelector('#dealercity').textContent
+                    const phone =document.querySelector('#dealerphone').textContent
 
                     return {website,city,phone}
             })
@@ -81,6 +81,7 @@ debugger;
         //requestList,
         requestQueue,
         maxConcurrency: 5,
+        navigationTimeoutSecs:120,
         launchContext: {
             // Chrome with stealth should work for most websites.
             // If it doesn't, feel free to remove this.
