@@ -81,6 +81,7 @@ debugger;
         //requestList,
         requestQueue,
         maxConcurrency: 5,
+        navigationTimeoutSecs:120,
         launchContext: {
             // Chrome with stealth should work for most websites.
             // If it doesn't, feel free to remove this.
