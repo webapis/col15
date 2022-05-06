@@ -40,7 +40,7 @@ jobs:
         run: 'npm install'
       - name: aggregation step
         id: collection
-        run: node main.js
+        run: node ford.js
 
 
 
