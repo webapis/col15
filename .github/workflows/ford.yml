@@ -1,4 +1,4 @@
-name: machka
+name: ford
 on:
   workflow_dispatch:
     inputs:
