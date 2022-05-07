@@ -4,11 +4,14 @@
 	"description": "This is a boilerplate of an Apify actor.",
 	"dependencies": {
 		"apify": "^2.0.7",
-		"cloudinary": "^1.28.1",
+		"cloudinary": "^1.29.1",
 		"dotenv": "^16.0.0",
+		"form-data": "^4.0.0",
+		"googleapis": "^100.0.0",
 		"mongodb": "^4.4.0",
 		"node-fetch": "^2.6.1",
 		"puppeteer": "*",
+		"request": "^2.88.2",
 		"wflows": "^1.2.18"
 	},
 	"devDependencies": {
@@ -19,6 +22,7 @@
 	"scripts": {
 		"snipe": "node snipe.js",
 		"start": "node main.js",
+		"wiska": "node wiska.js",
 		"defacto": "apify run -p",
 		"koton": "set startUrl=https://www.koton.com/tr/erkek/giyim/ust-giyim/gomlek/c/M01-C01-N01-AK101-K100059&& set JSONfileName=defacto-erkek-gomlek && set marka=defacto&& set gender=erkek&&set category=giyim&&set subcategory=gomlek&&apify run -p",
 		"lint": "./node_modules/.bin/eslint ./src --ext .js,.jsx",

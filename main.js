@@ -9,7 +9,7 @@
  
  
  const { getSheetValues, setSheetValue, appendSheetValues } = require('./google.sheet.js')
- const fs = require('fs')
+
  const Apify = require('apify');
  
  

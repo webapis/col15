@@ -1,50 +1,35 @@
 
 
+// (async ()=>{
+//     require('dotenv').config()
+//     const fs =require('fs')
+//     const {multipartUpload}=require('./google-drive')
+//     const { getGoogleToken } = require('./google/google.oauth')
+//     const access_token= await getGoogleToken()
+//     var fileMetadata = {
+//         'title': 'photo.jpg',
+//          mimeType: 'image/jpeg',
+       
+          
+//       };
+//    const response = await multipartUpload({filePath:'./wiski/wiskiimage.jpg',access_token,metadata:fileMetadata})
 
-debugger;
-(async () => {
-    require('dotenv').config();
+//    debugger;
+// })()
 
-    const { getGoogleToken } = require('./google/google.oauth')
-    const { getSheetValues } = require('./google.sheet.js')
-    const google_access_token = await getGoogleToken(process.env.GOOGLE_REFRESH_TOKEN)
+(async ()=>{
+
+//https://gist.github.com/tanaikech/33563b6754e5054f3a5832667100fe91
+require('dotenv').config()
+const fs =require('fs')
+const { getGoogleToken } = require('./google/google.oauth')
+const {singleFileUpload}=require('./google-drive')
 
 
-    const { values } = await getSheetValues({ access_token: google_access_token, spreadsheetId: '12mKtqxu5A-CVoXP_Kw36JxKiC69oPUUXVQmm7LUfh3s', range: 'NAV!A:C' })
+const filePath = "./wiski/wiskiimage.jpg";
+const access_token= await getGoogleToken()
+const accessToken =access_token
 
+    await singleFileUpload({filePath,access_token,fileName:'sample.jpg',folderId:'1UOLlom1V7xdJ3MVVxvtf_Jh__j84PPHD'})
 
-    const mapValues = values.filter((f, i) => i > 0).map(v => {
-        const subcategory = v[0]
-        const category = v[1]
-        const total = v[2]
-        return { subcategory, category, total }
-
-    })
-
-    const groupByCategory = mapValues.reduce((group, product) => {
-        const { category } = product;
-        group[category] = group[category] ?? [];
-        group[category].push(product);
-        return group;
-    }, {});
-
-    const mapCategoryTotal = {}
-    for (let o in groupByCategory) {
-
-        const current = groupByCategory[o]
-        const subcategories = Object.values(current)
-        const totalSubcategories =subcategories.reduce((p,c,i)=>{
-            return p+ parseInt(c.total)
-        
-        },0)
-        mapCategoryTotal[o]={}
-        mapCategoryTotal[o]['total']=totalSubcategories
-        debugger;
-        mapCategoryTotal[o]['subcategories']=subcategories
-        debugger;
-   
-    }
-    debugger;
 })()
-
-
